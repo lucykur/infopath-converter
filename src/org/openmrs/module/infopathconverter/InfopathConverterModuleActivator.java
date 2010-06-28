@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.basicmodule;
+package org.openmrs.module.infopathconverter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,7 +20,7 @@ import org.openmrs.module.Activator;
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
  */
-public class BasicModuleActivator implements Activator {
+public class InfopathConverterModuleActivator implements Activator {
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	

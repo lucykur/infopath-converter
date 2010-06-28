@@ -13,7 +13,7 @@
 			Convert infopath files to HTMLForm.
 	</description>
 
-	<activator>@MODULE_PACKAGE@.InfopathConverterActivator</activator>
+	<activator>@MODULE_PACKAGE@.InfopathConverterModuleActivator</activator>
 	
 	<!-- <updateURL>https://dev.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL> -->
 	<!-- /Base Module Properties -->
@@ -88,14 +88,6 @@
 	<messages>
 		<lang>en</lang>
 		<file>messages.properties</file>
-	</messages>
-	<messages>
-		<lang>fr</lang>
-		<file>messages_fr.properties</file>
-	</messages>
-	<messages>
-		<lang>es</lang>
-		<file>messages_es.properties</file>
 	</messages>
 	<!-- /Internationalization -->
 	

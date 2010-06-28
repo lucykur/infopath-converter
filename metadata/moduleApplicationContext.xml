@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-
 <!-- Beans to add to the current Application context definition -->
-  
+
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:p="http://www.springframework.org/schema/p"
@@ -23,7 +21,6 @@
            	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
             http://www.springframework.org/schema/util
             http://www.springframework.org/schema/util/spring-util-3.0.xsd">
-	
-    <context:component-scan base-package="org.openmrs.module.infopath.controller"/>	
+    <context:component-scan base-package="org.openmrs.module.infopath.web.controller"/>
     <!-- /Controllers -->
 </beans>

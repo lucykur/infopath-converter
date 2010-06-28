@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!-- ********************************************************* -->
-<!-- ** Basic Module                                        ** -->
+<!-- ** Infopath Converter Module                                        ** -->
 <!-- **	                                                    ** -->
-<!-- ** @author Ben Wolfe                                   ** -->
+<!-- ** @author Thoughtworks                                   ** -->
 <!-- ** @version 1.0                                        ** -->
 <!-- ********************************************************* -->
-<project name="BasicModule" default="package-module">
+<project name="InfopathConverterModule" default="package-module">
 		
 	<!-- *********************************************************** -->
 	<!-- **                     TARGETS                           ** -->
@@ -31,9 +31,9 @@
 		</filterset>
 		
 		<path id="classpath">
-			<fileset dir="lib">
-				<include name="**/*.jar"/>
-			</fileset>
+			<!--<fileset dir="lib">-->
+				<!--<include name="**/*.jar"/>-->
+			<!--</fileset>-->
 			<fileset dir="lib-common">
 				<include name="**/*.jar"/>
 			</fileset>
@@ -93,9 +93,9 @@
 		<!-- Copy lib folder -->
 		<!-- (lib should only contain this module's required -->
 		<!-- libraries that OpenMRS doesn't contain already) -->
-		<copy todir="build/lib" failonerror="false">
-			<fileset dir="lib" includes="**/*" />
-		</copy>
+		<!--<copy todir="build/lib" failonerror="false">-->
+			<!--<fileset dir="lib" includes="**/*" />-->
+		<!--</copy>-->
 		
 		<!-- Create distributable jar file -->
 		<jar destfile="dist/${module.id}-${module.version}.omod">
