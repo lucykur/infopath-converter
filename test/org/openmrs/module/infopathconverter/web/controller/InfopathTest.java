@@ -6,6 +6,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockMultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
@@ -21,10 +22,7 @@ public class InfopathTest {
 
     @Test
     public void shouldExtractFormsInInfopathFile() throws Exception {
-
-//        URL resource = this.getClass().getResource("/org/openmrs/module/infopathconverter/include/infopath.zip");
-//        InputStream stream = new FileInputStream(resource.getPath());
-        InputStream stream = new FileInputStream("/Users/lkurian/projects/infopath-converter/test/org/openmrs/module/infopathconverter/include/infopath.zip");
+        InputStream stream = new FileInputStream("./test/org/openmrs/module/infopathconverter/include/infopath.zip");
         MockMultipartHttpServletRequest multipartHttpServletRequest = new MockMultipartHttpServletRequest();
         multipartHttpServletRequest.addFile(new MockMultipartFile("infopath.zip", stream));
         MultipartFile file = multipartHttpServletRequest.getFile("infopath.zip");
