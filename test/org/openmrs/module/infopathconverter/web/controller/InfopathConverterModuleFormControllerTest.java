@@ -1,20 +1,11 @@
 package org.openmrs.module.infopathconverter.web.controller;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockMultipartHttpServletRequest;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,5 +30,10 @@ public class InfopathConverterModuleFormControllerTest {
         InfopathConverterModuleFormController controller = new InfopathConverterModuleFormController();
         controller.convert(map, file);
 //        Assert.assertTrue(map.containsKey("htmlform"));
+    }
+
+    @Test
+    public void shouldConvertMultiPartFileToZipFile() throws Exception {
+
     }
 }

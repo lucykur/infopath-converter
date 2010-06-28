@@ -2,14 +2,8 @@ package org.openmrs.module.infopathconverter.web.controller;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockMultipartHttpServletRequest;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.net.URL;
+import java.util.zip.ZipFile;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,13 +16,9 @@ public class InfopathTest {
 
     @Test
     public void shouldExtractFormsInInfopathFile() throws Exception {
-        InputStream stream = new FileInputStream("./test/org/openmrs/module/infopathconverter/include/infopath.zip");
-        MockMultipartHttpServletRequest multipartHttpServletRequest = new MockMultipartHttpServletRequest();
-        multipartHttpServletRequest.addFile(new MockMultipartFile("infopath.zip", stream));
-        MultipartFile file = multipartHttpServletRequest.getFile("infopath.zip");
-        
-        Infopath infopath = new Infopath(file);
+        Infopath infopath = new Infopath(new ZipFile("./test/org/openmrs/module/infopathconverter/include/infopath.zip"));
         Assert.assertEquals(1, infopath.forms().size());
     }
+
 
 }

@@ -4,8 +4,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -16,9 +18,9 @@ import java.util.zip.ZipInputStream;
  * To change this template use File | Settings | File Templates.
  */
 public class Infopath {
-    private MultipartFile file;
+    private ZipFile file;
 
-    public Infopath(MultipartFile file) {
+    public Infopath(ZipFile file) {        
         this.file = file;
     }
 
@@ -29,9 +31,10 @@ public class Infopath {
 
     private List<InfopathForm> extractForms() throws IOException {
         List<InfopathForm> infopathForms = new ArrayList<InfopathForm>();
-        ZipInputStream inputStream = new ZipInputStream(file.getInputStream());
-        ZipEntry zipEntry;
-        while ((zipEntry = inputStream.getNextEntry()) != null) {
+
+        Enumeration<? extends ZipEntry> zipEntries = file.entries();
+        while (zipEntries.hasMoreElements()) {
+            ZipEntry zipEntry = zipEntries.nextElement();
             if (zipEntry.getName().endsWith(".xsl")) {
                 infopathForms.add(new InfopathForm(zipEntry.getName()));
             }
