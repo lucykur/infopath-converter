@@ -29,9 +29,13 @@ public class InfopathFormTest {
     @Test
     public void shouldTransformPatientName() throws Exception {
         String content = String.format("%s%s%s",HEADER,"<span class='xdTextBox' xd:binding='patient/patient.given_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.given_name'/></span>" +
-                "<span class='xdTextBox' xd:binding='patient/patient.family_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.family_name'/></span>",FOOTER);
+                "<span class='xdTextBox' xd:binding='patient/patient.family_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.family_name'/></span>" +
+                "<span class='xdTextBox' xd:binding='patient/patient.medical_record_number' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.medical_record_number'/></span>",FOOTER);
         InfopathForm form = new InfopathForm("page1.xsl", content);
         Document transformedXSN = form.toPage();        
-        assertXpathExists("//lookup[@expression='patient.personName.givenName']", transformedXSN);        
+        assertXpathExists("//lookup[@expression='patient.personName.givenName']", transformedXSN);
+        assertXpathExists("//lookup[@expression='patient.personName.familyName']", transformedXSN);
+        assertXpathExists("//lookup[@expression='patient.patientIdentifier.identifier']", transformedXSN);
+
     }
 }

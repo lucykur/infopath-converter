@@ -22,6 +22,8 @@ public class PatientRules {
     public PatientRules() {
         this.patientExpressionMap = new HashMap<String, String>();
         patientExpressionMap.put("patient/patient.given_name", "patient.personName.givenName");
+        patientExpressionMap.put("patient/patient.family_name", "patient.personName.familyName");
+        patientExpressionMap.put("patient/patient.medical_record_number", "patient.patientIdentifier.identifier");
     }
 
     public void apply(Document page, NodeList nodes) {
