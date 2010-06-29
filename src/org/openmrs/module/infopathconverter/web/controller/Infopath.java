@@ -1,13 +1,11 @@
 package org.openmrs.module.infopathconverter.web.controller;
 
-import org.springframework.web.multipart.MultipartFile;
-
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -18,31 +16,37 @@ import java.util.zip.ZipInputStream;
  * To change this template use File | Settings | File Templates.
  */
 public class Infopath {
-    private ZipFile file;
+    private ZipInputStream stream;
 
-    public Infopath(ZipFile file) {        
-        this.file = file;
+    public Infopath(ZipInputStream stream) {
+        this.stream = stream;
     }
 
-    public Rules parse() {
-//        extractForms();
-        return null;
-    }
 
     private List<InfopathForm> extractForms() throws IOException {
-        List<InfopathForm> infopathForms = new ArrayList<InfopathForm>();
-
-        Enumeration<? extends ZipEntry> zipEntries = file.entries();
-        while (zipEntries.hasMoreElements()) {
-            ZipEntry zipEntry = zipEntries.nextElement();
-            if (zipEntry.getName().endsWith(".xsl")) {
-                infopathForms.add(new InfopathForm(zipEntry.getName()));
+        List<InfopathForm> forms = new ArrayList<InfopathForm>();
+        ZipEntry entry;
+        while ((entry = stream.getNextEntry()) != null) {
+            if (entry.getName().endsWith(".xsl")) {
+                byte[] data = new byte[2048];
+                
+                ByteArrayOutputStream writer = new ByteArrayOutputStream();
+                int count;
+                while ((count = stream.read(data, 0, 2048)) != -1) {
+                    writer.write(data,0,count);
+                }
+                forms.add(new InfopathForm(entry.getName(),writer.toString()));
             }
         }
-        return infopathForms;
+        return forms;
     }
 
-    public List<InfopathForm> forms() throws IOException {
-        return extractForms();
+    public String toHTMLForm() throws IOException {
+        List<InfopathForm> forms = extractForms();
+        HtmlForm htmlForm = new HtmlForm();
+        for(InfopathForm form:forms){
+            htmlForm.addPage(form.toPage());
+        }
+        return htmlForm.toString();
     }
 }

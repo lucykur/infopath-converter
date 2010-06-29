@@ -9,9 +9,14 @@ package org.openmrs.module.infopathconverter.web.controller;
  */
 public class InfopathForm {
     private String formName;
+    private String content;
 
-    public InfopathForm(String formName) {
-        //To change body of created methods use File | Settings | File Templates.
+    public InfopathForm(String formName, String content) {
         this.formName = formName;
+        this.content = content;
+    }
+
+    public String toPage() {
+        return String.format("<page title='%s'></page>", formName);
     }
 }

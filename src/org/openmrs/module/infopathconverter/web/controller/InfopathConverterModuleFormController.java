@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.zip.ZipInputStream;
 
 @Controller
 @RequestMapping("module/infopathconverter/infopathconvertermoduleLink.form")
@@ -33,11 +34,8 @@ public class InfopathConverterModuleFormController {
 
     @RequestMapping(method = RequestMethod.POST)
     public void convert(ModelMap map, @RequestParam(value = "xsn", required = true) MultipartFile file) throws IOException {
-//        Infopath infopath = new Infopath(file);
-//        Rules rules = infopath.parse();
-//        HtmlFormBuilder builder = new HtmlFormBuilder(rules);
-//        HtmlForm htmlForm = builder.build();
-//        map.put("htmlform", htmlForm.toString());
-
+        Infopath infopath = new Infopath(new ZipInputStream(file.getInputStream()));
+        map.put("htmlform", infopath.toHTMLForm());
     }
-}
+
+   }

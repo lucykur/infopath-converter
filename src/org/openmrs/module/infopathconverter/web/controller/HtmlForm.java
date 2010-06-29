@@ -1,5 +1,8 @@
 package org.openmrs.module.infopathconverter.web.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * User: lkurian
@@ -8,4 +11,23 @@ package org.openmrs.module.infopathconverter.web.controller;
  * To change this template use File | Settings | File Templates.
  */
 public class HtmlForm {
+    private List<String> pages;
+
+    public HtmlForm() {
+        pages = new ArrayList<String>();
+    }
+
+    public String toString() {
+        StringBuffer xml = new StringBuffer();
+        xml.append("<htmlform>");
+        for (String page : pages) {
+            xml.append(page);
+        }
+        xml.append("</htmlform>");
+        return xml.toString();
+    }
+
+    public void addPage(String page) {
+        pages.add(page);
+    }
 }
