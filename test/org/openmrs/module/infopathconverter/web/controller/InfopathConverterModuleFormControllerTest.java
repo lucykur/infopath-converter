@@ -49,7 +49,6 @@ public class InfopathConverterModuleFormControllerTest {
     }
 
     @Test
-    @Ignore
     public void shouldHavePatientTransformation() throws Exception {
         assertXpathExists("//lookup[@expression='patient.personName.givenName']", htmlform);
     }

@@ -35,7 +35,11 @@ public class InfopathConverterModuleFormController {
     @RequestMapping(method = RequestMethod.POST)
     public void convert(ModelMap map, @RequestParam(value = "xsn", required = true) MultipartFile file) throws IOException {
         Infopath infopath = new Infopath(new ZipInputStream(file.getInputStream()));
-        map.put("htmlform", infopath.toHTMLForm());
+        try {
+            map.put("htmlform", infopath.toHTMLForm());
+        } catch (Exception e) {
+            map.put("error",e.getMessage());  
+        }
     }
 
    }

@@ -8,7 +8,7 @@ package org.openmrs.module.infopathconverter.web.controller;
  * To change this template use File | Settings | File Templates.
  */
 public class HtmlFormBuilder {
-    public HtmlFormBuilder(Rules rules) {
+    public HtmlFormBuilder(PatientRules rules) {
     }
 
     public HtmlForm build() {

@@ -41,7 +41,7 @@ public class Infopath {
         return forms;
     }
 
-    public String toHTMLForm() throws IOException {
+    public String toHTMLForm() throws Exception {
         List<InfopathForm> forms = extractForms();
         HtmlForm htmlForm = new HtmlForm();
         for(InfopathForm form:forms){
