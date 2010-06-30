@@ -3,7 +3,11 @@ package org.openmrs.module.infopathconverter.web.controller;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
+import static org.custommonkey.xmlunit.XMLAssert.assertXpathNotExists;
 
 /**
  * Created by IntelliJ IDEA.
@@ -36,6 +40,21 @@ public class InfopathFormTest {
         assertXpathExists("//lookup[@expression='patient.personName.givenName']", transformedXSN);
         assertXpathExists("//lookup[@expression='patient.personName.familyName']", transformedXSN);
         assertXpathExists("//lookup[@expression='patient.patientIdentifier.identifier']", transformedXSN);
+
+    }
+
+    @Test
+    public void shouldNotTransformBindingsNotStartingWithPatient() throws Exception {
+        String content = String.format("%s%s%s",HEADER,"<span class='xdTextBox' xd:binding='obs/patient.family_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.family_name'/></span>",FOOTER);
+        InfopathForm form = new InfopathForm("page1.xsl", content);
+        Document transformedXSN = form.toPage();
+        assertXpathNotExists("//lookup[@expression='']", transformedXSN);
+        assertXpathExists("//span", transformedXSN);        
+    }
+
+    @Test
+    public void shouldTransformEncountersName() throws Exception {
+        
 
     }
 }

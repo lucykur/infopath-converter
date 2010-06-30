@@ -55,7 +55,7 @@ public class InfopathForm {
 
 
     private void extractBindings(Document document) throws XPathExpressionException {
-        NodeList nodes = XPathUtils.matchNodes(document, "//*[contains(@xd:binding,'patient')]");
+        NodeList nodes = XPathUtils.matchNodes(document, "//*[starts-with(@xd:binding,'patient/')]");
         new PatientRules().apply(document, nodes);
 
     }
