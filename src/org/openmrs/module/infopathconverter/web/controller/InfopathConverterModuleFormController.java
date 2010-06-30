@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.infopathconverter.web.controller;
 
+import org.openmrs.web.WebConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.zip.ZipInputStream;
 
@@ -33,13 +35,16 @@ public class InfopathConverterModuleFormController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void convert(ModelMap map, @RequestParam(value = "xsn", required = true) MultipartFile file) throws IOException {
-        Infopath infopath = new Infopath(new ZipInputStream(file.getInputStream()));
+    public void convert(ModelMap map, HttpSession session, @RequestParam(value = "xsn", required = true) MultipartFile file) throws IOException {
+        ZipInputStream inputStream = new ZipInputStream(file.getInputStream());        
+        Infopath infopath = new Infopath(inputStream);
         try {
-            map.put("htmlform", infopath.toHTMLForm());
+            map.addAttribute("htmlform", infopath.toHTMLForm());
         } catch (Exception e) {
-            map.put("error",e.getMessage());  
+            session.setAttribute(WebConstants.OPENMRS_ERROR_ATTR, "infopathcoverter.parse.failure");
+            session.setAttribute(WebConstants.OPENMRS_ERROR_ARGS, e.getMessage());
+
         }
     }
 
-   }
+}

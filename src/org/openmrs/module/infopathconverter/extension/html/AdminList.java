@@ -47,7 +47,7 @@ public class AdminList extends AdministrationSectionExt {
 		
 		Map<String, String> map = new HashMap<String, String>();
 		
-		map.put("module/infopathconverter/infopathconvertermoduleLink.form", "infopathconvertermodule.link.name");
+		map.put("module/infopathconverter/infopathconvertermoduleLink.form", "infopathconverter.link.name");
 		
 		return map;
 	}
