@@ -1,21 +1,11 @@
-package org.openmrs.module.infopathconverter.web.controller;
+package org.openmrs.module.infopathconverter;
 
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import java.io.File;
-import java.io.FileInputStream;
-
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathNotExists;
 
-/**
- * Created by IntelliJ IDEA.
- * User: lkurian
- * Date: Jun 29, 2010
- * Time: 3:01:58 PM
- * To change this template use File | Settings | File Templates.
- */
 public class InfopathFormTest {
 
     private static final String HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
@@ -32,11 +22,11 @@ public class InfopathFormTest {
 
     @Test
     public void shouldTransformPatientName() throws Exception {
-        String content = String.format("%s%s%s",HEADER,"<span class='xdTextBox' xd:binding='patient/patient.given_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.given_name'/></span>" +
+        String content = String.format("%s%s%s", HEADER, "<span class='xdTextBox' xd:binding='patient/patient.given_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.given_name'/></span>" +
                 "<span class='xdTextBox' xd:binding='patient/patient.family_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.family_name'/></span>" +
-                "<span class='xdTextBox' xd:binding='patient/patient.medical_record_number' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.medical_record_number'/></span>",FOOTER);
+                "<span class='xdTextBox' xd:binding='patient/patient.medical_record_number' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.medical_record_number'/></span>", FOOTER);
         InfopathForm form = new InfopathForm("page1.xsl", content);
-        Document transformedXSN = form.toPage();        
+        Document transformedXSN = form.toPage();
         assertXpathExists("//lookup[@expression='patient.personName.givenName']", transformedXSN);
         assertXpathExists("//lookup[@expression='patient.personName.familyName']", transformedXSN);
         assertXpathExists("//lookup[@expression='patient.patientIdentifier.identifier']", transformedXSN);
@@ -45,16 +35,16 @@ public class InfopathFormTest {
 
     @Test
     public void shouldNotTransformBindingsNotStartingWithPatient() throws Exception {
-        String content = String.format("%s%s%s",HEADER,"<span class='xdTextBox' xd:binding='obs/patient.family_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.family_name'/></span>",FOOTER);
+        String content = String.format("%s%s%s", HEADER, "<span class='xdTextBox' xd:binding='obs/patient.family_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.family_name'/></span>", FOOTER);
         InfopathForm form = new InfopathForm("page1.xsl", content);
         Document transformedXSN = form.toPage();
         assertXpathNotExists("//lookup[@expression='']", transformedXSN);
-        assertXpathExists("//span", transformedXSN);        
+        assertXpathExists("//span", transformedXSN);
     }
 
     @Test
     public void shouldTransformEncountersName() throws Exception {
-        
+
 
     }
 }

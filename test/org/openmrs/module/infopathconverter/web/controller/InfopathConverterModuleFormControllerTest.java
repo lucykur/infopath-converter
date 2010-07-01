@@ -1,12 +1,12 @@
 package org.openmrs.module.infopathconverter.web.controller;
 
 import org.custommonkey.xmlunit.XMLUnit;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockMultipartHttpServletRequest;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartFile;
-import org.w3c.dom.Document;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,13 +15,6 @@ import java.io.InputStream;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
 
-/**
- * Created by IntelliJ IDEA.
- * User: lkurian
- * Date: Jun 28, 2010
- * Time: 11:25:28 AM
- * To change this template use File | Settings | File Templates.
- */
 public class InfopathConverterModuleFormControllerTest {
     private final String infopathZip = "./test/org/openmrs/module/infopathconverter/include/infopath.zip";
 
@@ -39,7 +32,7 @@ public class InfopathConverterModuleFormControllerTest {
 
     @Test
     public void shouldReturnAValidXML() throws Exception {
-        Document document = XMLUnit.buildControlDocument(convert(infopathZip));
+        XMLUnit.buildControlDocument(convert(infopathZip));
     }
 
     @Test
@@ -57,7 +50,15 @@ public class InfopathConverterModuleFormControllerTest {
     }
 
     @Test
+    @Ignore
     public void shouldDisplayErrorMessageForInvalidFiles() throws Exception {
-         String htmlform = convert("./test/org/openmrs/module/infopathconverter/include/invalidInfopath.txt");
+        convert("./test/org/openmrs/module/infopathconverter/include/invalidInfopath.txt");
     }
+
+    @Test
+    @Ignore
+    public void shouldNotChangeQuotingInAttributes() throws Exception {
+        convert(infopathZip);
+    }
+
 }

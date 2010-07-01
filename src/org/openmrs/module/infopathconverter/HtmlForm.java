@@ -1,13 +1,12 @@
-package org.openmrs.module.infopathconverter.web.controller;
+package org.openmrs.module.infopathconverter;
 
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
+import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -15,13 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by IntelliJ IDEA.
- * User: lkurian
- * Date: Jun 28, 2010
- * Time: 2:52:01 PM
- * To change this template use File | Settings | File Templates.
- */
+
 public class HtmlForm {
     private List<Document> pages;
     private Map<String, String> namespaceMappings;
@@ -39,13 +32,13 @@ public class HtmlForm {
             htmlFormDocument = XmlDocumentFactory.createEmptyXmlDocument();
             Node element = addHtmlFormElement(htmlFormDocument);
             for (Document page : pages) {
-                element.appendChild(htmlFormDocument.importNode(page.getDocumentElement(),true));
+                element.appendChild(htmlFormDocument.importNode(page.getDocumentElement(), true));
             }
             return documentAsString(htmlFormDocument);
 
         } catch (Exception e) {
             return "";
-        } 
+        }
     }
 
     private Node addHtmlFormElement(Document document) {
@@ -61,12 +54,12 @@ public class HtmlForm {
     }
 
     private String documentAsString(Document xmlDocument) throws IOException {
-		OutputFormat format = new OutputFormat(xmlDocument);
-		StringWriter writer = new StringWriter();
-		XMLSerializer serializer = new XMLSerializer(writer, format);
-		serializer.serialize(xmlDocument);
-		return writer.toString();
-	}
+        OutputFormat format = new OutputFormat(xmlDocument);
+        StringWriter writer = new StringWriter();
+        XMLSerializer serializer = new XMLSerializer(writer, format);
+        serializer.serialize(xmlDocument);
+        return writer.toString();
+    }
 
 
     public void addPage(Document page) {

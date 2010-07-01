@@ -1,4 +1,4 @@
-package org.openmrs.module.infopathconverter.web.controller;
+package org.openmrs.module.infopathconverter.xmlutils;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -9,13 +9,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created by IntelliJ IDEA.
- * User: lkurian
- * Date: Jun 29, 2010
- * Time: 2:47:51 PM
- * To change this template use File | Settings | File Templates.
- */
 public class XmlDocumentFactory {
     public static Document createXmlDocumentFromStream(InputStream stream) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilder builder = createDocumentBuilder();
@@ -28,6 +21,7 @@ public class XmlDocumentFactory {
         factory.setIgnoringComments(true);
         factory.setNamespaceAware(true);
         factory.setIgnoringElementContentWhitespace(true);
+        factory.setExpandEntityReferences(false);
         DocumentBuilder builder = factory.newDocumentBuilder();
         return builder;
     }

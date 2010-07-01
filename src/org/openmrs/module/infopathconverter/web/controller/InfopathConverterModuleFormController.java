@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.infopathconverter.web.controller;
 
+import org.openmrs.module.infopathconverter.Infopath;
 import org.openmrs.web.WebConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -36,14 +37,14 @@ public class InfopathConverterModuleFormController {
 
     @RequestMapping(method = RequestMethod.POST)
     public void convert(ModelMap map, HttpSession session, @RequestParam(value = "xsn", required = true) MultipartFile file) throws IOException {
-        ZipInputStream inputStream = new ZipInputStream(file.getInputStream());        
+
+        ZipInputStream inputStream = new ZipInputStream(file.getInputStream());
         Infopath infopath = new Infopath(inputStream);
         try {
             map.addAttribute("htmlform", infopath.toHTMLForm());
         } catch (Exception e) {
             session.setAttribute(WebConstants.OPENMRS_ERROR_ATTR, "infopathcoverter.parse.failure");
             session.setAttribute(WebConstants.OPENMRS_ERROR_ARGS, e.getMessage());
-
         }
     }
 

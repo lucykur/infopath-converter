@@ -28,14 +28,14 @@ public class InfopathConverterModuleActivator implements Activator {
 	 * @see org.openmrs.module.Activator#startup()
 	 */
 	public void startup() {
-		log.info("Starting Basic Module");
+		log.info("Starting Infopath Converter Module");
 	}
 	
 	/**
 	 * @see org.openmrs.module.Activator#shutdown()
 	 */
 	public void shutdown() {
-		log.info("Shutting down Basic Module");
+		log.info("Shutting down Infopath Converter Module");
 	}
 	
 }

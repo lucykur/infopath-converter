@@ -31,9 +31,6 @@
 		</filterset>
 		
 		<path id="classpath">
-			<!--<fileset dir="lib">-->
-				<!--<include name="**/*.jar"/>-->
-			<!--</fileset>-->
 			<fileset dir="lib-common">
 				<include name="**/*.jar"/>
 			</fileset>
@@ -60,14 +57,7 @@
 			<src path="src/" />
 			<include name="**/*.java" />
 		</javac>
-		
-		<!--  Compile module web java files -->
-		<javac destdir="build" classpathref="classpath" debug="true" debuglevel="lines,source,vars">
-			<compilerarg line="-g" />
-			<src path="web/src/" />
-			<include name="**/*.java" />
-		</javac>
-		
+			
 	</target>
 	
 	<target name="package-module" depends="compile-module" description="Packages module into jar file">
@@ -90,12 +80,6 @@
 			<fileset dir="web/module/" includes="resources/**/*" />
 		</copy>
 		
-		<!-- Copy lib folder -->
-		<!-- (lib should only contain this module's required -->
-		<!-- libraries that OpenMRS doesn't contain already) -->
-		<!--<copy todir="build/lib" failonerror="false">-->
-			<!--<fileset dir="lib" includes="**/*" />-->
-		<!--</copy>-->
 		
 		<!-- Create distributable jar file -->
 		<jar destfile="dist/${module.id}-${module.version}.omod">
