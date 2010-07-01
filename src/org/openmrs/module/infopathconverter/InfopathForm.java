@@ -1,6 +1,9 @@
 package org.openmrs.module.infopathconverter;
 
-import org.openmrs.module.infopathconverter.rules.PatientRules;
+import org.openmrs.module.infopathconverter.rules.EncounterRule;
+import org.openmrs.module.infopathconverter.rules.ObservationRule;
+import org.openmrs.module.infopathconverter.rules.PatientRule;
+import org.openmrs.module.infopathconverter.rules.Rule;
 import org.openmrs.module.infopathconverter.xmlutils.XPathUtils;
 import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;
 import org.w3c.dom.Document;
@@ -49,8 +52,13 @@ public class InfopathForm {
 
 
     private void extractBindings(Document document) throws XPathExpressionException {
-        NodeList nodes = XPathUtils.matchNodes(document, "//*[starts-with(@xd:binding,'patient/')]");
-        new PatientRules().apply(document, nodes);
+        applyRules(document, "patient", new PatientRule());
+        applyRules(document, "encounter", new EncounterRule());
+        applyRules(document, "obs", new ObservationRule());
+    }
 
+    private void applyRules(Document document, String bindingName, Rule rules) throws XPathExpressionException {
+        String xpathQuery = String.format("//*[starts-with(@xd:binding,'%s/')]", bindingName);
+        rules.apply(document, XPathUtils.matchNodes(document, xpathQuery));
     }
 }

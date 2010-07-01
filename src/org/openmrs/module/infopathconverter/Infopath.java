@@ -39,6 +39,7 @@ public class Infopath {
         for (InfopathForm form : forms) {
             htmlForm.addPage(form.toPage());
         }
+
         return htmlForm.toString();
     }
 }

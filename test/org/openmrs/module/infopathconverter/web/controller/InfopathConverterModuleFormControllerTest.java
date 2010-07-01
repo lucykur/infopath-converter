@@ -37,7 +37,8 @@ public class InfopathConverterModuleFormControllerTest {
 
     @Test
     public void shouldContainPageElementWithTitle() throws Exception {
-        assertXpathExists("/htmlform/page[@title='Page1.xsl']", convert(infopathZip));
+        String html = convert(infopathZip);
+        assertXpathExists("/htmlform/page[@title='Page1.xsl']", html);
     }
 
     @Test

@@ -21,21 +21,21 @@ import org.openmrs.module.Activator;
  * This class contains the logic that is run every time this module is either started or shutdown
  */
 public class InfopathConverterModuleActivator implements Activator {
-	
-	private Log log = LogFactory.getLog(this.getClass());
-	
-	/**
-	 * @see org.openmrs.module.Activator#startup()
-	 */
-	public void startup() {
-		log.info("Starting Infopath Converter Module");
-	}
-	
-	/**
-	 * @see org.openmrs.module.Activator#shutdown()
-	 */
-	public void shutdown() {
-		log.info("Shutting down Infopath Converter Module");
-	}
-	
+
+    private Log log = LogFactory.getLog(this.getClass());
+
+    /**
+     * @see org.openmrs.module.Activator#startup()
+     */
+    public void startup() {
+        log.info("Starting Infopath Converter Module");
+    }
+
+    /**
+     * @see org.openmrs.module.Activator#shutdown()
+     */
+    public void shutdown() {
+        log.info("Shutting down Infopath Converter Module");
+    }
+
 }

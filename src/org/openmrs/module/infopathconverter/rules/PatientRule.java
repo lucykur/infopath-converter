@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class PatientRules {
+public class PatientRule implements Rule {
     private Map<String, String> patientExpressionMap;
 
-    public PatientRules() {
+    public PatientRule() {
         this.patientExpressionMap = new HashMap<String, String>();
         patientExpressionMap.put("patient/patient.given_name", "patient.personName.givenName");
         patientExpressionMap.put("patient/patient.family_name", "patient.personName.familyName");

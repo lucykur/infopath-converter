@@ -22,8 +22,7 @@ public class XmlDocumentFactory {
         factory.setNamespaceAware(true);
         factory.setIgnoringElementContentWhitespace(true);
         factory.setExpandEntityReferences(false);
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        return builder;
+        return factory.newDocumentBuilder();
     }
 
     public static Document createEmptyXmlDocument() throws ParserConfigurationException {

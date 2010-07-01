@@ -21,7 +21,7 @@ public class InfopathFormTest {
     private static final String FOOTER = "</body></html></xsl:template></xsl:stylesheet>";
 
     @Test
-    public void shouldTransformPatientName() throws Exception {
+    public void shouldTransformPatient() throws Exception {
         String content = String.format("%s%s%s", HEADER, "<span class='xdTextBox' xd:binding='patient/patient.given_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.given_name'/></span>" +
                 "<span class='xdTextBox' xd:binding='patient/patient.family_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.family_name'/></span>" +
                 "<span class='xdTextBox' xd:binding='patient/patient.medical_record_number' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.medical_record_number'/></span>", FOOTER);
@@ -35,7 +35,7 @@ public class InfopathFormTest {
 
     @Test
     public void shouldNotTransformBindingsNotStartingWithPatient() throws Exception {
-        String content = String.format("%s%s%s", HEADER, "<span class='xdTextBox' xd:binding='obs/patient.family_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.family_name'/></span>", FOOTER);
+        String content = String.format("%s%s%s", HEADER, "<span class='xdTextBox' xd:binding='obs1/patient.family_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.family_name'/></span>", FOOTER);
         InfopathForm form = new InfopathForm("page1.xsl", content);
         Document transformedXSN = form.toPage();
         assertXpathNotExists("//lookup[@expression='']", transformedXSN);
@@ -43,8 +43,41 @@ public class InfopathFormTest {
     }
 
     @Test
-    public void shouldTransformEncountersName() throws Exception {
-
+    public void shouldTransformEncounter() throws Exception {
+        String content = String.format("%s%s%s", HEADER, "<span hideFocus='1' class='xdDTText xdBehavior_GTFormattingNoBUI' contentEditable='true' tabIndex='0' xd:binding='encounter/encounter.encounter_datetime' xd:xctname='DTPicker_DTText' xd:datafmt='&quot;datetime&quot;,&quot;dateFormat:dd MMMM, yyyy;timeFormat:none;&quot;' xd:boundProp='xd:num' xd:innerCtrl='_DTText'>" +
+                "                        <xsl:attribute name='xd:num'>" +
+                "                            <xsl:value-of select='encounter/encounter.encounter_datetime'/>" +
+                "                        </xsl:attribute>" +
+                "                        <xsl:choose>" +
+                "                            <xsl:when test='not(string(encounter/encounter.encounter_datetime))'>" +
+                "                                <xsl:attribute name='xd:ghosted'>true</xsl:attribute>Click -&gt;</xsl:when>" +
+                "                            <xsl:when test='function-available(\"xdFormatting:formatString\")'>" +
+                "                                <xsl:value-of select='xdFormatting:formatString(encounter/encounter.encounter_datetime,&quot;datetime&quot;,&quot;dateFormat:dd MMMM, yyyy;timeFormat:none;&quot;)'/>" +
+                "                            </xsl:when>" +
+                "                            <xsl:otherwise>" +
+                "                                <xsl:value-of select='encounter/encounter.encounter_datetime'/>" +
+                "                            </xsl:otherwise>" +
+                "                        </xsl:choose>" +
+                "                    </span>", FOOTER);
+        InfopathForm form = new InfopathForm("encounter", content);
+        Document transformedXSN = form.toPage();
+        assertXpathNotExists("//span", transformedXSN);
 
     }
+
+    @Test
+    public void shouldTransformObservations() throws Exception {
+        String content = String.format("%s%s%s", HEADER, "<input xd:binding='obs/patient_hospitalized/value'>" +
+                "<xsl:attribute name='xd:value'>" +
+                "<xsl:value-of select='obs/patient_hospitalized/value'/>" +
+                "</xsl:attribute>" +
+                "<xsl:if test='obs/patient_hospitalized/value=&quot;1065^YES^99DCT&quot;'>" +
+                "<xsl:attribute name='CHECKED'>CHECKED</xsl:attribute>" +
+                "</xsl:if>" +
+                "</input>", FOOTER);
+        InfopathForm form = new InfopathForm("obs", content);
+        Document transformedXSN = form.toPage();
+        assertXpathNotExists("//input", transformedXSN);
+    }
+
 }

@@ -13,10 +13,8 @@ public class XPathUtils {
         XPathFactory factory = XPathFactory.newInstance();
         javax.xml.xpath.XPath xpath = factory.newXPath();
         xpath.setNamespaceContext(new XDNamespaceContext());
-        NodeList nodeList = (NodeList) xpath.evaluate(query, document,
+        return (NodeList) xpath.evaluate(query, document,
                 XPathConstants.NODESET);
-
-        return nodeList;
     }
 
 }

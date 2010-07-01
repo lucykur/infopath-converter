@@ -34,11 +34,16 @@ public class HtmlForm {
             for (Document page : pages) {
                 element.appendChild(htmlFormDocument.importNode(page.getDocumentElement(), true));
             }
-            return documentAsString(htmlFormDocument);
+
+            return forceEntityReferences(documentAsString(htmlFormDocument));
 
         } catch (Exception e) {
             return "";
         }
+    }
+
+    private String forceEntityReferences(String html) {
+        return html.replace("&", "&#38;");
     }
 
     private Node addHtmlFormElement(Document document) {
