@@ -49,6 +49,12 @@ public class InfopathConverterModuleFormControllerTest {
         assertXpathExists("//lookup[@expression='patient.patientIdentifier.identifier']", htmlform);
 
     }
+    
+    @Test
+    public void shouldNotChangeQuotingInAttributes() throws Exception {
+        String htmlForm = convert(infopathZip);
+        assertXpathExists("//input[@value='&lt;- Select Provider']", htmlForm);
+    }
 
     @Test
     @Ignore
@@ -56,10 +62,5 @@ public class InfopathConverterModuleFormControllerTest {
         convert("./test/org/openmrs/module/infopathconverter/include/invalidInfopath.txt");
     }
 
-    @Test
-    @Ignore
-    public void shouldNotChangeQuotingInAttributes() throws Exception {
-        convert(infopathZip);
-    }
 
 }
