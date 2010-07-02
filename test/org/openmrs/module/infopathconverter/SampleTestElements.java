@@ -71,14 +71,16 @@ public class SampleTestElements {
 
 
 
-    public static final String OBSERVATION = String.format("%s%s%s", HEADER, "<input xd:binding='obs/patient_hospitalized/value'>" +
-            "<xsl:attribute name='xd:value'>" +
-            "<xsl:value-of select='obs/patient_hospitalized/value'/>" +
-            "</xsl:attribute>" +
-            "<xsl:if test='obs/patient_hospitalized/value=&quot;1065^YES^99DCT&quot;'>" +
-            "<xsl:attribute name='CHECKED'>CHECKED</xsl:attribute>" +
-            "</xsl:if>" +
-            "</input>", FOOTER);
+    public static final String OBSERVATION_CODED_XSL = String.format("%s%s%s", HEADER, "<div>" +
+            "<input xd:binding=\"obs/patient_hospitalized/value\">" +
+                "<xsl:attribute name=\"xd:value\">" +
+                "<xsl:value-of select=\"obs/patient_hospitalized/value\"/>" +
+                "</xsl:attribute>" +
+                "<xsl:if test=\"obs/patient_hospitalized/value=&quot;1065^YES^99DCT&quot;\">" +
+                "<xsl:attribute name=\"CHECKED\">CHECKED</xsl:attribute>" +
+                "</xsl:if>" +
+            "</input>" +
+            "</div>", FOOTER);
 
       
     public static final String ENCOUNTER_PROVIDER = String.format("%s%s%s",HEADER, "<div><font>Form completed today by: </font>" +
@@ -86,4 +88,15 @@ public class SampleTestElements {
                                                             "<xsl:value-of select=\"substring-after(encounter/encounter.provider_id, &quot;^&quot;)\"/>" +
                                                           "</span>" +
                                                     "</div>",FOOTER);
+    
+    public static final String OBSERVATION_CODED_XSD = "";
+
+    public static final String OBSERVATION_CODED_XML = "<form id=\"112\" name=\"Cardiology consultation\" version=\"1.6\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:openmrs=\"http://staging.pih-emr.org:8080/openmrs/moduleServlet/formentry/forms/schema/112-94\" xmlns:xd=\"http://schemas.microsoft.com/office/infopath/2003\">" +
+            "<obs openmrs_concept=\"1238^MEDICAL RECORD OBSERVATIONS^99DCT\" openmrs_datatype=\"ZZ\">\n" +
+            "    <patient_hospitalized openmrs_concept=\"3389^PATIENT HOSPITALIZED^99DCT\" openmrs_datatype=\"CWE\" multiple=\"0\">\n" +
+            "        <date xsi:nil=\"true\"></date>\n" +
+            "        <time xsi:nil=\"true\"></time>\n" +
+            "        <value xsi:nil=\"true\"></value>\n" +
+            "    </patient_hospitalized></obs>"+
+            "</form>";
 }

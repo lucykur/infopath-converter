@@ -19,7 +19,7 @@ public class PatientRule implements Rule {
         patientExpressionMap.put("patient/patient.medical_record_number", "patient.patientIdentifier.identifier");
     }
 
-    public void apply(Document page, NodeList nodes) {
+    public void apply(Document page, NodeList nodes, String observationCodedXml) {
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
             Element lookupElement = page.createElement("lookup");

@@ -58,9 +58,9 @@ public class InfopathFormTest {
 
     @Test
     public void shouldTransformObservations() throws Exception {
-        InfopathForm form = new InfopathForm("obs", SampleTestElements.OBSERVATION);
+        InfopathForm form = new InfopathForm("obs", SampleTestElements.OBSERVATION_CODED_XSL, SampleTestElements.OBSERVATION_CODED_XML);
         Document transformedXSN = form.toPage();
-        assertXpathNotExists("//input", transformedXSN);
+        assertXpathExists("//obs[@conceptId='3389']", transformedXSN);
     }
 
 }

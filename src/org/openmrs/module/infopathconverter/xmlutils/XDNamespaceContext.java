@@ -11,6 +11,8 @@ public class XDNamespaceContext implements NamespaceContext {
             return "http://schemas.microsoft.com/office/infopath/2003";
         } else if (prefix.equals("xsl")) {
             return "http://www.w3.org/1999/XSL/Transform";
+        } else if (prefix.equals("xsi")) {
+            return "http://www.w3.org/2001/XMLSchema-instance";
         }
         return null;
     }
