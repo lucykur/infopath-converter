@@ -52,13 +52,12 @@ public class InfopathForm {
 
 
     private void extractBindings(Document document) throws XPathExpressionException {
-        applyRules(document, "patient", new PatientRule());
-        applyRules(document, "encounter", new EncounterRule());
-        applyRules(document, "obs", new ObservationRule());
+        applyRules(document, "//*[starts-with(@xd:binding,'patient/')]", new PatientRule());
+        applyRules(document, "//*[starts-with(@xd:binding,'encounter/') or contains(@xd:binding,'encounter/encounter.provider_id')]", new EncounterRule());
+        applyRules(document, "//*[starts-with(@xd:binding,'obs/')]", new ObservationRule());
     }
 
-    private void applyRules(Document document, String bindingName, Rule rules) throws XPathExpressionException {
-        String xpathQuery = String.format("//*[starts-with(@xd:binding,'%s/')]", bindingName);
-        rules.apply(document, XPathUtils.matchNodes(document, xpathQuery));
+    private void applyRules(Document document, String query, Rule rules) throws XPathExpressionException {
+        rules.apply(document, XPathUtils.matchNodes(document, query));
     }
 }

@@ -41,7 +41,7 @@ public class InfopathFormTest {
     @Test
     @Ignore("To be implemented once we have more clarity")
     public void shouldTransferEncounterLocation() throws Exception {
-        InfopathForm form = new InfopathForm("encounter location", SampleTestElements.EncounterLocation);
+        InfopathForm form = new InfopathForm("encounter location", SampleTestElements.ENCOUNTER_LOCATION);
         Document document = form.toPage();
         assertXpathExists("//encounterLocation[@order='30,27']", document);
         assertXpathNotExists("//div", document);
@@ -50,8 +50,10 @@ public class InfopathFormTest {
 
     @Test
     public void shouldTransferEncounterProvider() throws Exception {
-        
-
+        InfopathForm form = new InfopathForm("encounter provider", SampleTestElements.ENCOUNTER_PROVIDER);
+        Document document = form.toPage();
+        assertXpathExists("//encounterProvider", document);
+        assertXpathNotExists("//span", document);
     }
 
     @Test

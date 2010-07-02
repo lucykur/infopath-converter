@@ -67,7 +67,7 @@ public class SampleTestElements {
             "</strong>" +
             "</em>" ;
 
-    public static String EncounterLocation = String.format("%s%s%s", HEADER, "<div>"+ locationMulundi + locationRusumo + "</div>",FOOTER);
+    public static String ENCOUNTER_LOCATION = String.format("%s%s%s", HEADER, "<div>"+ locationMulundi + locationRusumo + "</div>",FOOTER);
 
 
 
@@ -79,4 +79,11 @@ public class SampleTestElements {
             "<xsl:attribute name='CHECKED'>CHECKED</xsl:attribute>" +
             "</xsl:if>" +
             "</input>", FOOTER);
+
+      
+    public static final String ENCOUNTER_PROVIDER = String.format("%s%s%s",HEADER, "<div><font>Form completed today by: </font>" +
+                                                         "<span xd:binding='substring-after(encounter/encounter.provider_id, &quot;^&quot;)'>" +
+                                                            "<xsl:value-of select=\"substring-after(encounter/encounter.provider_id, &quot;^&quot;)\"/>" +
+                                                          "</span>" +
+                                                    "</div>",FOOTER);
 }

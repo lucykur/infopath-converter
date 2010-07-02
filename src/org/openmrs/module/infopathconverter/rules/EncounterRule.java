@@ -16,7 +16,8 @@ public class EncounterRule implements Rule {
     public EncounterRule() {
         this.encounterExpressionMap = new HashMap<String, String>();
         encounterExpressionMap.put("encounter/encounter.encounter_datetime", "encounterDate");
-        encounterExpressionMap.put("encounter/encounter.location_id", "encounterLocation");
+//        encounterExpressionMap.put("encounter/encounter.location_id", "encounterLocation");
+        encounterExpressionMap.put("encounter/encounter.provider_id", "encounterProvider");
         bindingsMap = new HashMap<String, List<Node>>();
     }
 
@@ -36,7 +37,11 @@ public class EncounterRule implements Rule {
 
     private String transformAttribute(Node lookupNode) {
         String bindingName = lookupNode.getAttributes().getNamedItem("xd:binding").getNodeValue();
-        return encounterExpressionMap.get(bindingName);
-
+        for (String encounterName : encounterExpressionMap.keySet()) {
+            if (bindingName.contains(encounterName)) {
+                return encounterExpressionMap.get(encounterName);
+            }
+        }
+        return null;
     }
 }
