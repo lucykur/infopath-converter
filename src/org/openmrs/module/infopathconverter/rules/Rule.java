@@ -4,5 +4,5 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 public interface Rule {
-    void apply(Document page, NodeList nodes, String observationCodedXsd) throws Exception;
+    void apply(Document page, NodeList nodes) throws Exception;
 }

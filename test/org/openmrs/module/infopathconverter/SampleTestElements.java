@@ -73,7 +73,7 @@ public class SampleTestElements {
 
 
     public static final String OBSERVATION_CODED_XSL = String.format("%s%s%s", HEADER, "<div>" +
-            "<input xd:binding=\"obs/patient_hospitalized/value\">" +
+            "<input xd:binding=\"obs/patient_hospitalized/value\" type='checkbox' xd:onValue=\"1065^YES^99DCT\">" +
                 "<xsl:attribute name=\"xd:value\">" +
                 "<xsl:value-of select=\"obs/patient_hospitalized/value\"/>" +
                 "</xsl:attribute>" +

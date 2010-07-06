@@ -17,7 +17,7 @@ public class EncounterRule implements Rule {
         encounterExpressionMap.put("encounter/encounter.provider_id", "encounterProvider");
     }
 
-    public void apply(Document document, NodeList nodes, String observationCodedXml) {
+    public void apply(Document document, NodeList nodes) {
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
             String elementName = transformAttribute(node);

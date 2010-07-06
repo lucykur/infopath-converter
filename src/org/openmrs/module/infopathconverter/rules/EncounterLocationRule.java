@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EncounterLocationRule implements Rule {
-    public void apply(Document page, NodeList nodes, String observationCodedXsd) throws Exception {
+    public void apply(Document page, NodeList nodes) throws Exception {
         EncounterNodes encounterNodes = new EncounterNodes(nodes);
         Node parentNode = encounterNodes.getParentNode();
         Element element = page.createElement("encounterLocation");

@@ -2,6 +2,7 @@ package org.openmrs.module.infopathconverter;
 
 import org.openmrs.module.infopathconverter.rules.EncounterLocationRule;
 import org.openmrs.module.infopathconverter.rules.EncounterRule;
+import org.openmrs.module.infopathconverter.rules.Observation.ObservationCheckboxRule;
 import org.openmrs.module.infopathconverter.rules.PatientRule;
 import org.openmrs.module.infopathconverter.rules.Rule;
 import org.openmrs.module.infopathconverter.xmlutils.XPathUtils;
@@ -18,22 +19,14 @@ import java.io.ByteArrayInputStream;
 public class InfopathForm {
     private String formName;
     private String content;
-    private String observationCodedXml;
 
     public InfopathForm(String formName, String content) {
         this.formName = formName;
         this.content = content;
-        this.observationCodedXml = null;
 
     }
-
-    public InfopathForm(String formName, String content, String observationCodedXml) {
-        this.formName = formName;
-        this.content = content;
-        this.observationCodedXml = observationCodedXml;
-    }
-
-    public Document toPage() throws Exception {
+    
+    public Document toPage(String template) throws Exception {
         ByteArrayInputStream stream = new ByteArrayInputStream(content.getBytes());
         Document rawDocument = XmlDocumentFactory.createXmlDocumentFromStream(stream);
         Node node = extractPageBody(rawDocument);
@@ -44,7 +37,7 @@ public class InfopathForm {
         page.appendChild(pageElement);
         pageElement.appendChild(page.importNode(node, true));
 
-        extractBindings(page);
+        extractBindings(page, template);
         return page;
     }
 
@@ -58,14 +51,15 @@ public class InfopathForm {
     }
 
 
-    private void extractBindings(Document document) throws Exception {
+    private void extractBindings(Document document, String template) throws Exception {
         applyRules(document, "//*[starts-with(@xd:binding,'patient/')]", new PatientRule());
         applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.encounter_datetime') or contains(@xd:binding,'encounter/encounter.provider_id')]", new EncounterRule());
         applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.location_id')]", new EncounterLocationRule());
+        applyRules(document, "//*[starts-with(@xd:binding,'obs/') and @type='checkbox']", new ObservationCheckboxRule(template));
     }
 
     private void applyRules(Document document, String query, Rule rule) throws Exception {
         NodeList nodes = XPathUtils.matchNodes(document, query);
-        if(nodes !=null && nodes.getLength() > 0) rule.apply(document, nodes, observationCodedXml);
+        if(nodes !=null && nodes.getLength() > 0) rule.apply(document, nodes);
     }
 }
