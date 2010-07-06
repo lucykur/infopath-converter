@@ -12,6 +12,7 @@ import java.util.HashMap;
 public class ObservationRule implements Rule {
     private HashMap<String, Element> observationExpressionMap;
     private Document document;
+    private OpenMRSConceptFinder openMRSConceptFinder;
     private String template;
 
 
@@ -20,6 +21,7 @@ public class ObservationRule implements Rule {
         document = XmlDocumentFactory.createEmptyXmlDocument();
         this.observationExpressionMap = new HashMap<String, Element>();
         observationExpressionMap.put("CWE", createObservationElement());
+
     }
 
     private Element createObservationElement() {
@@ -31,9 +33,10 @@ public class ObservationRule implements Rule {
 
 
     public void apply(Document page, NodeList nodes) throws Exception {
+        openMRSConceptFinder = new OpenMRSConceptFinder(template);
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
-            OpenMRSConcept concept = new OpenMRSConceptFinder(template).findConcept(node);
+            OpenMRSConcept concept = openMRSConceptFinder.findConcept(node);
             Element observationNode = observationExpressionMap.get(concept.openmrs_datatype);
             if (observationNode != null) {
                 if (concept.multiple.equals("0")) {
