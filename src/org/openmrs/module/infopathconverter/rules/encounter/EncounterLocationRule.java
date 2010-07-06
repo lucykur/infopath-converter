@@ -1,5 +1,6 @@
-package org.openmrs.module.infopathconverter.rules;
+package org.openmrs.module.infopathconverter.rules.encounter;
 
+import org.openmrs.module.infopathconverter.rules.Rule;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

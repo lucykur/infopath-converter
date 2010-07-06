@@ -1,8 +1,8 @@
 package org.openmrs.module.infopathconverter;
 
-import org.openmrs.module.infopathconverter.rules.EncounterLocationRule;
-import org.openmrs.module.infopathconverter.rules.EncounterRule;
-import org.openmrs.module.infopathconverter.rules.Observation.ObservationCheckboxRule;
+import org.openmrs.module.infopathconverter.rules.encounter.EncounterLocationRule;
+import org.openmrs.module.infopathconverter.rules.encounter.EncounterRule;
+import org.openmrs.module.infopathconverter.rules.observation.ObservationRule;
 import org.openmrs.module.infopathconverter.rules.PatientRule;
 import org.openmrs.module.infopathconverter.rules.Rule;
 import org.openmrs.module.infopathconverter.xmlutils.XPathUtils;
@@ -55,7 +55,7 @@ public class InfopathForm {
         applyRules(document, "//*[starts-with(@xd:binding,'patient/')]", new PatientRule());
         applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.encounter_datetime') or contains(@xd:binding,'encounter/encounter.provider_id')]", new EncounterRule());
         applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.location_id')]", new EncounterLocationRule());
-        applyRules(document, "//*[starts-with(@xd:binding,'obs/') and @type='checkbox']", new ObservationCheckboxRule(template));
+        applyRules(document, "//*[starts-with(@xd:binding,'obs/')]", new ObservationRule(template));
     }
 
     private void applyRules(Document document, String query, Rule rule) throws Exception {
