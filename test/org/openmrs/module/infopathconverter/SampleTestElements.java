@@ -42,13 +42,14 @@ public class SampleTestElements {
 
 
     static String locationRusumo =
-            "<em><input class=\"xdBehavior_Boolean\" name=\"{generate-id(encounter/encounter.location_id)}\"> " +
-            "xd:binding=\"encounter/encounter.location_id\" xd:xctname=\"OptionButton\" xd:onValue=\"30\">" +
-            "<xsl:attribute name=\"xd:value\">" +
-            "<xsl:value-of select=\"encounter/encounter.location_id\"/>" +
+            "<em>" +
+            "<input class='xdBehavior_Boolean' name='{generate-id(encounter/encounter.location_id)}' " +
+            "xd:binding='encounter/encounter.location_id' xd:xctname='OptionButton' xd:onValue='30'>" +
+            "<xsl:attribute name='xd:value'>" +
+            "<xsl:value-of select='encounter/encounter.location_id'/>" +
             "</xsl:attribute>" +
-            "<xsl:if test=\"encounter/encounter.location_id=&quot;30&quot;\">" +
-            "<xsl:attribute name=\"CHECKED\">CHECKED</xsl:attribute>" +
+            "<xsl:if test='encounter/encounter.location_id=&quot;30&quot;'>" +
+            "<xsl:attribute name='CHECKED'>CHECKED</xsl:attribute>" +
             "</xsl:if>" +
             "</input>" +
             "</em>" ;
@@ -56,12 +57,12 @@ public class SampleTestElements {
     static String locationMulundi =
             "<em>" +
             "<strong>" +
-            "<input class=\"xdBehavior_Boolean\" name='{generate-id(encounter/encounter.location_id)}'  xd:binding='encounter/encounter.location_id' xd:onValue='27'>" +            
-            "<xsl:attribute name=\"xd:value\">" +
-            "<xsl:value-of select=\"encounter/encounter.location_id\"/>" +
+            "<input class='xdBehavior_Boolean' name='{generate-id(encounter/encounter.location_id)}'  xd:binding='encounter/encounter.location_id' xd:onValue='27'>" +
+            "<xsl:attribute name='xd:value'>" +
+            "<xsl:value-of select='encounter/encounter.location_id'/>" +
             "</xsl:attribute>" +
-            "<xsl:if test=\"encounter/encounter.location_id=&quot;27&quot;\">" +
-            "<xsl:attribute name=\"CHECKED\">CHECKED</xsl:attribute>" +
+            "<xsl:if test='encounter/encounter.location_id=&quot;27&quot;'>" +
+            "<xsl:attribute name='CHECKED'>CHECKED</xsl:attribute>" +
             "</xsl:if>" +
             "</input>" +
             "</strong>" +

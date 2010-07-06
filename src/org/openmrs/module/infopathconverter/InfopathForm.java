@@ -1,7 +1,7 @@
 package org.openmrs.module.infopathconverter;
 
+import org.openmrs.module.infopathconverter.rules.EncounterLocationRule;
 import org.openmrs.module.infopathconverter.rules.EncounterRule;
-import org.openmrs.module.infopathconverter.rules.Observation.ObservationRule;
 import org.openmrs.module.infopathconverter.rules.PatientRule;
 import org.openmrs.module.infopathconverter.rules.Rule;
 import org.openmrs.module.infopathconverter.xmlutils.XPathUtils;
@@ -60,11 +60,12 @@ public class InfopathForm {
 
     private void extractBindings(Document document) throws Exception {
         applyRules(document, "//*[starts-with(@xd:binding,'patient/')]", new PatientRule());
-        applyRules(document, "//*[starts-with(@xd:binding,'encounter/') or contains(@xd:binding,'encounter/encounter.provider_id')]", new EncounterRule());
-        applyRules(document, "//*[starts-with(@xd:binding,'obs/')]", new ObservationRule());
+        applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.encounter_datetime') or contains(@xd:binding,'encounter/encounter.provider_id')]", new EncounterRule());
+        applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.location_id')]", new EncounterLocationRule());
     }
 
-    private void applyRules(Document document, String query, Rule rules) throws Exception {
-        rules.apply(document, XPathUtils.matchNodes(document, query), observationCodedXml);
+    private void applyRules(Document document, String query, Rule rule) throws Exception {
+        NodeList nodes = XPathUtils.matchNodes(document, query);
+        if(nodes !=null && nodes.getLength() > 0) rule.apply(document, nodes, observationCodedXml);
     }
 }

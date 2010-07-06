@@ -14,7 +14,6 @@ public class EncounterRule implements Rule {
     public EncounterRule() {
         this.encounterExpressionMap = new HashMap<String, String>();
         encounterExpressionMap.put("encounter/encounter.encounter_datetime", "encounterDate");
-//        encounterExpressionMap.put("encounter/encounter.location_id", "encounterLocation");
         encounterExpressionMap.put("encounter/encounter.provider_id", "encounterProvider");
     }
 
