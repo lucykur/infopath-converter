@@ -5,6 +5,7 @@ import org.openmrs.module.infopathconverter.rules.encounter.EncounterRule;
 import org.openmrs.module.infopathconverter.rules.observation.ObservationRule;
 import org.openmrs.module.infopathconverter.rules.PatientRule;
 import org.openmrs.module.infopathconverter.rules.Rule;
+import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
 import org.openmrs.module.infopathconverter.xmlutils.XPathUtils;
 import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;
 import org.w3c.dom.Document;
@@ -26,7 +27,7 @@ public class InfopathForm {
 
     }
     
-    public Document toPage(String template) throws Exception {
+    public Document toPage(Document templateXml) throws Exception {
         ByteArrayInputStream stream = new ByteArrayInputStream(content.getBytes());
         Document rawDocument = XmlDocumentFactory.createXmlDocumentFromStream(stream);
         Node node = extractPageBody(rawDocument);
@@ -37,7 +38,7 @@ public class InfopathForm {
         page.appendChild(pageElement);
         pageElement.appendChild(page.importNode(node, true));
 
-        extractBindings(page, template);
+        extractBindings(page, templateXml);
         return page;
     }
 
@@ -51,11 +52,11 @@ public class InfopathForm {
     }
 
 
-    private void extractBindings(Document document, String template) throws Exception {
+    private void extractBindings(Document document, Document templateXml) throws Exception {
         applyRules(document, "//*[starts-with(@xd:binding,'patient/')]", new PatientRule());
         applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.encounter_datetime') or contains(@xd:binding,'encounter/encounter.provider_id')]", new EncounterRule());
         applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.location_id')]", new EncounterLocationRule());
-        applyRules(document, "//*[starts-with(@xd:binding,'obs/')]", new ObservationRule(template));
+        applyRules(document, "//*[starts-with(@xd:binding,'obs/')]", new ObservationRule(new TemplateXml(templateXml)));
     }
 
     private void applyRules(Document document, String query, Rule rule) throws Exception {

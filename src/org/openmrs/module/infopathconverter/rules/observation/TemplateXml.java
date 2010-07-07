@@ -1,39 +1,35 @@
 package org.openmrs.module.infopathconverter.rules.observation;
 
 import org.openmrs.module.infopathconverter.xmlutils.XPathUtils;
-import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathExpressionException;
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OpenMRSConceptFinder {
+public class TemplateXml {
     private Document document;
 
-    public OpenMRSConceptFinder(String template) throws Exception {
-        document = XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(template.getBytes()));
+    public TemplateXml(Document document) throws Exception {
+        this.document = document;
     }
 
     public OpenMRSConcept findConcept(Node node) throws Exception {
-
         return new BindingNode(node).
-               forEachSegment(
-                       new NodeAction()
-                       {
-                                OpenMRSConcept execute(String segment)
-                                {
-                                    try {
-                                        NodeList list = XPathUtils.matchNodes(document, String.format("//%s[@openmrs_concept and @openmrs_datatype != 'ZZ']",segment));
-                                        return new SegmentNode(list).toOpenMRSConcept();
-                                    } catch (XPathExpressionException e) {
-                                        return null;
-                                    }
+                forEachSegment(
+                        new NodeAction() {
+                            OpenMRSConcept execute(String segment) {
+                                try {
+                                    //TODO: Improve performance
+                                    NodeList list = XPathUtils.matchNodes(document, String.format("//%s[@openmrs_concept and @openmrs_datatype != 'ZZ']", segment));
+                                    return new SegmentNode(list).toOpenMRSConcept();
+                                } catch (XPathExpressionException e) {
+                                    return null;
                                 }
-                       });
+                            }
+                        });
 
 
     }
@@ -48,10 +44,10 @@ public class OpenMRSConceptFinder {
 
         public OpenMRSConcept forEachSegment(NodeAction action) {
             String[] segments = binding.split("/");
-            OpenMRSConcept concept= null;
+            OpenMRSConcept concept = null;
             for (int i = 1; i < segments.length; i++) {
                 concept = action.execute(segments[i]);
-                if(concept!=null) break;
+                if (concept != null) break;
             }
             return concept;
         }

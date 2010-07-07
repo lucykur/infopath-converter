@@ -13,15 +13,14 @@ import java.util.HashMap;
 public class ObservationRule implements Rule {
     private HashMap<String, Element> expressions;
     private Document document;
-    private OpenMRSConceptFinder finder;
-    private String template;
+    private TemplateXml templateXml;
 
 
-    public ObservationRule(String template) throws Exception {
-        this.template = template;
+    public ObservationRule(TemplateXml templateXml) throws Exception {
         document = XmlDocumentFactory.createEmptyXmlDocument();
         this.expressions = new HashMap<String, Element>();
         expressions.put("CWE", createObservationElement());
+        this.templateXml = templateXml;
     }
 
     private Element createObservationElement() {
@@ -33,10 +32,10 @@ public class ObservationRule implements Rule {
 
 
     public void apply(Document page, NodeList nodes) throws Exception {
-        finder = new OpenMRSConceptFinder(template);
+
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
-            OpenMRSConcept concept = finder.findConcept(node);
+            OpenMRSConcept concept = templateXml.findConcept(node);
             Element observationNode = expressions.get(concept.datatype);
             if (observationNode != null) {
                 if (concept.multiple != null) {
