@@ -26,18 +26,16 @@ public class OpenMRSConceptFinder {
             if (openmrsConceptMatchList.getLength() > 0) {
                 Node node = openmrsConceptMatchList.item(0);
                 if (node.getAttributes().getNamedItem("openmrs_concept") != null) {
-
-                    Node isMultipleNode = node.getAttributes().getNamedItem("multiple");
-                    String isMultiple = "0";
-                    if (isMultipleNode != null) {
-                        isMultiple = isMultipleNode.getNodeValue();
+                    String datatype = node.getAttributes().getNamedItem("openmrs_datatype").getNodeValue();
+                    if (!"ZZ".equals(datatype)) {
+                        Node isMultipleNode = node.getAttributes().getNamedItem("multiple");
+                        String isMultiple = "0";
+                        if (isMultipleNode != null) {
+                            isMultiple = isMultipleNode.getNodeValue();
+                        }
+                        String openmrs_concept = node.getAttributes().getNamedItem("openmrs_concept").getNodeValue();
+                        return new OpenMRSConcept(isMultiple, getConceptId(openmrs_concept), datatype);
                     }
-
-                    String openmrs_concept = node.getAttributes().getNamedItem("openmrs_concept").getNodeValue();
-
-                    String openmrs_datatype = node.getAttributes().getNamedItem("openmrs_datatype").getNodeValue();
-
-                    return new OpenMRSConcept(isMultiple, getConceptId(openmrs_concept), openmrs_datatype);
                 }
             }
 
@@ -51,5 +49,5 @@ public class OpenMRSConceptFinder {
             return openmrs_concept.substring(0, index);
         return null;
     }
-    
+
 }

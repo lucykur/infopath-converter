@@ -16,30 +16,12 @@ public class SampleTestElements {
     private static final String FOOTER = "</body></html></xsl:template></xsl:stylesheet>";
 
     
-    public static final String ENCOUNTER_DATE = String.format("%s%s%s",HEADER,"<span hideFocus='1' class='xdDTText xdBehavior_GTFormattingNoBUI' contentEditable='true' tabIndex='0' xd:binding='encounter/encounter.encounter_datetime' xd:xctname='DTPicker_DTText' xd:datafmt='&quot;datetime&quot;,&quot;dateFormat:dd MMMM, yyyy;timeFormat:none;&quot;' xd:boundProp='xd:num' xd:innerCtrl='_DTText'>" +
-            "                        <xsl:attribute name='xd:num'>" +
-            "                            <xsl:value-of select='encounter/encounter.encounter_datetime'/>" +
-            "                        </xsl:attribute>" +
-            "                        <xsl:choose>" +
-            "                            <xsl:when test='not(string(encounter/encounter.encounter_datetime))'>" +
-            "                                <xsl:attribute name='xd:ghosted'>true</xsl:attribute>Click -&gt;</xsl:when>" +
-            "                            <xsl:when test='function-available(\"xdFormatting:formatString\")'>" +
-            "                                <xsl:value-of select='xdFormatting:formatString(encounter/encounter.encounter_datetime,&quot;datetime&quot;,&quot;dateFormat:dd MMMM, yyyy;timeFormat:none;&quot;)'/>" +
-            "                            </xsl:when>" +
-            "                            <xsl:otherwise>" +
-            "                                <xsl:value-of select='encounter/encounter.encounter_datetime'/>" +
-            "                            </xsl:otherwise>" +
-            "                        </xsl:choose>" +
-            "                    </span>",FOOTER);
-
-
     public static final String PATIENT = String.format("%s%s%s", HEADER, "<span class='xdTextBox' xd:binding='patient/patient.given_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.given_name'/></span>" +
             "<span class='xdTextBox' xd:binding='patient/patient.family_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.family_name'/></span>" +
             "<span class='xdTextBox' xd:binding='patient/patient.medical_record_number' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.medical_record_number'/></span>", FOOTER);
 
+
     public static final String OTHER = String.format("%s%s%s",HEADER, "<span class='xdTextBox' xd:binding='obs1/patient.family_name' xd:CtrlId='CTRL5'> <xsl:value-of select='patient/patient.family_name'/></span>", FOOTER);
-
-
 
     static String locationRusumo =
             "<em>" +
@@ -53,6 +35,8 @@ public class SampleTestElements {
             "</xsl:if>" +
             "</input>" +
             "</em>" ;
+
+
 
     static String locationMulundi =
             "<em>" +
@@ -70,27 +54,42 @@ public class SampleTestElements {
 
     public static String ENCOUNTER_LOCATION = String.format("%s%s%s", HEADER, "<div>"+ locationMulundi + locationRusumo + "</div>",FOOTER);
 
+    public static final String ENCOUNTER_DATE = String.format("%s%s%s",HEADER,"<span hideFocus='1' class='xdDTText xdBehavior_GTFormattingNoBUI' contentEditable='true' tabIndex='0' xd:binding='encounter/encounter.encounter_datetime' xd:xctname='DTPicker_DTText' xd:datafmt='&quot;datetime&quot;,&quot;dateFormat:dd MMMM, yyyy;timeFormat:none;&quot;' xd:boundProp='xd:num' xd:innerCtrl='_DTText'>" +
+            "                        <xsl:attribute name='xd:num'>" +
+            "                            <xsl:value-of select='encounter/encounter.encounter_datetime'/>" +
+            "                        </xsl:attribute>" +
+            "                        <xsl:choose>" +
+            "                            <xsl:when test='not(string(encounter/encounter.encounter_datetime))'>" +
+            "                                <xsl:attribute name='xd:ghosted'>true</xsl:attribute>Click -&gt;</xsl:when>" +
+            "                            <xsl:when test='function-available(\"xdFormatting:formatString\")'>" +
+            "                                <xsl:value-of select='xdFormatting:formatString(encounter/encounter.encounter_datetime,&quot;datetime&quot;,&quot;dateFormat:dd MMMM, yyyy;timeFormat:none;&quot;)'/>" +
+            "                            </xsl:when>" +
+            "                            <xsl:otherwise>" +
+            "                                <xsl:value-of select='encounter/encounter.encounter_datetime'/>" +
+            "                            </xsl:otherwise>" +
+            "                        </xsl:choose>" +
+            "                    </span>",FOOTER);
 
 
-    public static final String OBSERVATION_CODED_XSL = String.format("%s%s%s", HEADER, "<div>" +
-            "<input xd:binding=\"obs/patient_hospitalized/value\" type='checkbox' xd:onValue=\"1065^YES^99DCT\">" +
-                "<xsl:attribute name=\"xd:value\">" +
-                "<xsl:value-of select=\"obs/patient_hospitalized/value\"/>" +
-                "</xsl:attribute>" +
-                "<xsl:if test=\"obs/patient_hospitalized/value=&quot;1065^YES^99DCT&quot;\">" +
-                "<xsl:attribute name=\"CHECKED\">CHECKED</xsl:attribute>" +
-                "</xsl:if>" +
-            "</input>" +
-            "</div>", FOOTER);
 
-      
     public static final String ENCOUNTER_PROVIDER = String.format("%s%s%s",HEADER, "<div><font>Form completed today by: </font>" +
                                                          "<span xd:binding='substring-after(encounter/encounter.provider_id, &quot;^&quot;)'>" +
                                                             "<xsl:value-of select=\"substring-after(encounter/encounter.provider_id, &quot;^&quot;)\"/>" +
                                                           "</span>" +
                                                     "</div>",FOOTER);
+
+
+    public static final String OBSERVATION_CODED_XSL = String.format("%s%s%s", HEADER, "<div>" +
+            "<input xd:binding=\"obs/patient_hospitalized/value\" type='checkbox' xd:onValue=\"1065^YES^99DCT\">" +
+            "<xsl:attribute name=\"xd:value\">" +
+            "<xsl:value-of select=\"obs/patient_hospitalized/value\"/>" +
+            "</xsl:attribute>" +
+            "<xsl:if test=\"obs/patient_hospitalized/value=&quot;1065^YES^99DCT&quot;\">" +
+            "<xsl:attribute name=\"CHECKED\">CHECKED</xsl:attribute>" +
+            "</xsl:if>" +
+            "</input>" +
+            "</div>", FOOTER);
     
-    public static final String OBSERVATION_CODED_XSD = "";
 
     public static final String OBSERVATION_CODED_XML = "<form id=\"112\" name=\"Cardiology consultation\" version=\"1.6\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:openmrs=\"http://staging.pih-emr.org:8080/openmrs/moduleServlet/formentry/forms/schema/112-94\" xmlns:xd=\"http://schemas.microsoft.com/office/infopath/2003\">" +
             "<obs openmrs_concept=\"1238^MEDICAL RECORD OBSERVATIONS^99DCT\" openmrs_datatype=\"ZZ\">\n" +
@@ -99,5 +98,45 @@ public class SampleTestElements {
             "        <time xsi:nil=\"true\"></time>\n" +
             "        <value xsi:nil=\"true\"></value>\n" +
             "    </patient_hospitalized></obs>"+
+            "</form>";
+
+
+ public static final String OBSERVATION_CODED_NON_SPECIFIED_XML = "<form id='112' name='Cardiology consultation' version='1.6' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:openmrs='http://staging.pih-emr.org:8080/openmrs/moduleServlet/formentry/forms/schema/112-94' xmlns:xd='http://schemas.microsoft.com/office/infopath/2003'>" +
+         "<history_of_present_illness>"+
+         "  <previous_echocardiogram_taken openmrs_concept='3301^PREVIOUS ECHOCARDIOGRAM TAKEN^99DCT' openmrs_datatype='CWE' multiple='0'>" +
+         "            <date xsi:nil='true'></date>" +
+         "            <time xsi:nil='true'></time>" +
+         "            <value xsi:nil='true'></value>" +
+         "      </previous_echocardiogram_taken>" +
+         "</history_of_present_illness>"+
+         "   </form>";
+
+    public static final String OBSERVATION_CODED_NON_SPECIFIED_XSL = String.format("%s%s%s", HEADER,"<strong><input class='xdBehavior_Boolean' title='' type='radio' name='{generate-id(obs/history_of_present_illness/previous_echocardiogram_taken/value)}' tabIndex='0' xd:binding='obs/history_of_present_illness/previous_echocardiogram_taken/value' xd:xctname='OptionButton' xd:CtrlId='CTRL1314' xd:boundProp='xd:value' style='FONT-SIZE: 7pt; FONT-WEIGHT: normal'>" +
+            "<xsl:attribute name='xd:value'>" +
+            "<xsl:value-of select='obs/history_of_present_illness/previous_echocardiogram_taken/value'/>" +
+            "</xsl:attribute>" +
+            "<xsl:if test='obs/history_of_present_illness/previous_echocardiogram_taken/value=&quot;&quot;'>" +
+            "<xsl:attribute name='CHECKED'>CHECKED</xsl:attribute>" +
+            "</xsl:if>" +
+            "</input>" +
+            "</strong>",FOOTER);
+
+
+    public static final String OBSERVATION_CODED_XSL_TYPE_ZZ = String.format("%s%s%s", HEADER,"<input class='xdBehavior_Boolean' title='' type='checkbox' tabIndex='0' xd:binding='obs/physical_exam/general_exam_construct/general_exam_findings/well_appearing' xd:xctname='CheckBox' xd:CtrlId='CTRL598' xd:boundProp='xd:value' xd:offValue='false' xd:onValue='true' style='FONT-FAMILY: Arial'>" +
+            "<xsl:attribute name='xd:value'>" +
+            "<xsl:value-of select='obs/physical_exam/general_exam_construct/general_exam_findings/well_appearing'/>" +
+            "</xsl:attribute>" +
+            "<xsl:if test='obs/physical_exam/general_exam_construct/general_exam_findings/well_appearing=&quot;true&quot;'>" +
+            "<xsl:attribute name='CHECKED'>CHECKED</xsl:attribute>" +
+            "</xsl:if>" +
+            "</input>",FOOTER);
+
+    public static final String OBSERVATION_CODED_XML_TYPE_ZZ = "<form id='112' name='Cardiology consultation' version='1.6' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:openmrs='http://staging.pih-emr.org:8080/openmrs/moduleServlet/formentry/forms/schema/112-94' xmlns:xd='http://schemas.microsoft.com/office/infopath/2003'>" +
+            "<general_exam_construct openmrs_concept='2419^GENERAL EXAM CONSTRUCT^99DCT' openmrs_datatype='ZZ'>" +
+            "        <general_exam_findings openmrs_concept='1119^GENERAL EXAM FINDINGS^99DCT' openmrs_datatype='CWE' multiple='0'>" +
+            "                <date xsi:nil='true'></date>" +
+            "                <time xsi:nil='true'></time>" +
+            "        </general_exam_findings>" +
+            "      </general_exam_construct>" +
             "</form>";
 }

@@ -2,12 +2,16 @@ package org.openmrs.module.infopathconverter.rules.observation;
 
 public class OpenMRSConcept {
     public String multiple;
-    public String openmrs_concept;
-    public String openmrs_datatype;
+    public String id;
+    public String datatype;
 
-    public OpenMRSConcept(String multiple, String openmrs_concept, String openmrs_datatype) {
+    public OpenMRSConcept(String multiple, String id, String datatype) {
         this.multiple = multiple;
-        this.openmrs_concept = openmrs_concept;
-        this.openmrs_datatype = openmrs_datatype;
+        this.id = id;
+        this.datatype = datatype;
+    }
+
+    public boolean isMultiple() {
+        return multiple.equals("0");
     }
 }

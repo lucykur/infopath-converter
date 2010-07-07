@@ -10,17 +10,17 @@ import org.w3c.dom.NodeList;
 import java.util.HashMap;
 
 public class ObservationRule implements Rule {
-    private HashMap<String, Element> observationExpressionMap;
+    private HashMap<String, Element> expressions;
     private Document document;
-    private OpenMRSConceptFinder openMRSConceptFinder;
+    private OpenMRSConceptFinder finder;
     private String template;
 
 
     public ObservationRule(String template) throws Exception {
         this.template = template;
         document = XmlDocumentFactory.createEmptyXmlDocument();
-        this.observationExpressionMap = new HashMap<String, Element>();
-        observationExpressionMap.put("CWE", createObservationElement());
+        this.expressions = new HashMap<String, Element>();
+        expressions.put("CWE", createObservationElement());
 
     }
 
@@ -33,15 +33,15 @@ public class ObservationRule implements Rule {
 
 
     public void apply(Document page, NodeList nodes) throws Exception {
-        openMRSConceptFinder = new OpenMRSConceptFinder(template);
+        finder = new OpenMRSConceptFinder(template);
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
-            OpenMRSConcept concept = openMRSConceptFinder.findConcept(node);
-            Element observationNode = observationExpressionMap.get(concept.openmrs_datatype);
+            OpenMRSConcept concept = finder.findConcept(node);
+            Element observationNode = expressions.get(concept.datatype);
             if (observationNode != null) {
-                if (concept.multiple.equals("0")) {
+                if (concept.isMultiple()) {
                     Node importedObservationNode = page.importNode(observationNode, true);
-                    importedObservationNode.getAttributes().getNamedItem("conceptId").setNodeValue(concept.openmrs_concept);
+                    importedObservationNode.getAttributes().getNamedItem("conceptId").setNodeValue(concept.id);
                     setAnswerConcepts(node, importedObservationNode);
                     node.getParentNode().replaceChild(importedObservationNode, node);
                 }
@@ -54,11 +54,14 @@ public class ObservationRule implements Rule {
 
     private void setAnswerConcepts(Node node, Node importedObservationNode) {
         Node answerConcept = node.getAttributes().getNamedItem("xd:onValue");
-        String answerConceptId = null;
+        String answerConceptId;
         if (answerConcept != null) {
             answerConceptId = getConceptId(answerConcept.getNodeValue());
             importedObservationNode.getAttributes().getNamedItem("answerConceptId").setNodeValue(answerConceptId);
+        } else {
+            importedObservationNode.getAttributes().removeNamedItem("answerConceptId");
         }
+
     }
 
 

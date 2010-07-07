@@ -60,4 +60,19 @@ public class InfopathFormTest {
         assertXpathExists("//obs[@conceptId='3389' and @answerConceptId='1065']", transformedXSN);
     }
 
+    @Test
+    public void shouldNotContainTheAnswerIdAttributeForNotSpecifiedObs() throws Exception {
+        InfopathForm form = new InfopathForm("obs", SampleTestElements.OBSERVATION_CODED_NON_SPECIFIED_XSL);
+        Document transformedXSN = form.toPage(SampleTestElements.OBSERVATION_CODED_NON_SPECIFIED_XML);
+        assertXpathExists("//obs[@conceptId='3301']", transformedXSN);
+        assertXpathNotExists("//obs[@answerConceptId]", transformedXSN);
+    }
+
+    @Test
+    public void shouldEnsureThatOpenMRSConceptOfDatatypeZZAreNotPickedUp() throws Exception {
+        InfopathForm form = new InfopathForm("obs", SampleTestElements.OBSERVATION_CODED_XSL_TYPE_ZZ);
+        Document transformedXSN = form.toPage(SampleTestElements.OBSERVATION_CODED_XML_TYPE_ZZ);
+        assertXpathExists("//obs[@conceptId='1119']", transformedXSN);
+
+    }
 }
