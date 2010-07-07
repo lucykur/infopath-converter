@@ -7,6 +7,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ObservationRule implements Rule {
@@ -21,7 +22,6 @@ public class ObservationRule implements Rule {
         document = XmlDocumentFactory.createEmptyXmlDocument();
         this.expressions = new HashMap<String, Element>();
         expressions.put("CWE", createObservationElement());
-
     }
 
     private Element createObservationElement() {
@@ -39,11 +39,10 @@ public class ObservationRule implements Rule {
             OpenMRSConcept concept = finder.findConcept(node);
             Element observationNode = expressions.get(concept.datatype);
             if (observationNode != null) {
-                if (concept.isMultiple()) {
+                if (concept.multiple != null) {
                     Node importedObservationNode = page.importNode(observationNode, true);
                     importedObservationNode.getAttributes().getNamedItem("conceptId").setNodeValue(concept.id);
-                    setAnswerConcepts(node, importedObservationNode);
-                    node.getParentNode().replaceChild(importedObservationNode, node);
+                    createTransformedNodes(node, concept, importedObservationNode);
                 }
             } else
                 node.getParentNode().removeChild(node);
@@ -52,16 +51,39 @@ public class ObservationRule implements Rule {
 
     }
 
-    private void setAnswerConcepts(Node node, Node importedObservationNode) {
-        Node answerConcept = node.getAttributes().getNamedItem("xd:onValue");
-        String answerConceptId;
-        if (answerConcept != null) {
-            answerConceptId = getConceptId(answerConcept.getNodeValue());
-            importedObservationNode.getAttributes().getNamedItem("answerConceptId").setNodeValue(answerConceptId);
-        } else {
-            importedObservationNode.getAttributes().removeNamedItem("answerConceptId");
+    private void createTransformedNodes(Node node, OpenMRSConcept concept, Node importedObservationNode) {
+        ArrayList<Node> nodesWithAnswerConcepts = getNodesWithAnswerConcepts(node, importedObservationNode, concept);
+        for (Node nodeWithAnswer : nodesWithAnswerConcepts) {
+            node.getParentNode().appendChild(nodeWithAnswer);
         }
+        node.getParentNode().removeChild(node);
+    }
 
+    private ArrayList<Node> getNodesWithAnswerConcepts(Node node, Node importedObservationNode, OpenMRSConcept concept) {
+        ArrayList<Node> nodes = new ArrayList<Node>();
+        if (concept.isNotMultiple()) {
+            Node answerConcept = node.getAttributes().getNamedItem("xd:onValue");
+            String answerConceptId;
+            if (answerConcept != null) {
+                answerConceptId = getConceptId(answerConcept.getNodeValue());
+                importedObservationNode.getAttributes().getNamedItem("answerConceptId").setNodeValue(answerConceptId);
+            } else {
+                importedObservationNode.getAttributes().removeNamedItem("answerConceptId");
+            }
+            nodes.add(importedObservationNode);
+            return nodes;
+        } else {
+            if (concept.answers != null) {
+                for (String answer : concept.answers) {
+                    Node nodeWithAnswer = importedObservationNode.cloneNode(true);
+                    nodeWithAnswer.getAttributes().getNamedItem("answerConceptId").setNodeValue(answer);
+                    nodes.add(nodeWithAnswer);
+                }
+                return nodes;
+            }
+
+        }
+        return null;
     }
 
 

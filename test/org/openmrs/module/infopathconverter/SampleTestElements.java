@@ -139,4 +139,15 @@ public class SampleTestElements {
             "        </general_exam_findings>" +
             "      </general_exam_construct>" +
             "</form>";
+    public static final String OBSERVATION_CODED_MULTIPLE_XSL = OBSERVATION_CODED_XSL_TYPE_ZZ;
+
+    public static final String OBSERVATION_CODED_MULTIPLE_XML ="<form id='112' name='Cardiology consultation' version='1.6' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:openmrs='http://staging.pih-emr.org:8080/openmrs/moduleServlet/formentry/forms/schema/112-94' xmlns:xd='http://schemas.microsoft.com/office/infopath/2003'>" +
+            "<general_exam_construct openmrs_concept='2419^GENERAL EXAM CONSTRUCT^99DCT' openmrs_datatype='ZZ'>" +
+            "       <general_exam_findings openmrs_concept='1119^GENERAL EXAM FINDINGS^99DCT' openmrs_datatype='CWE' multiple='1'>" +
+            "         <oedema openmrs_concept='460^OEDEMA^99DCT'>false</oedema> " +
+            "         <jaundice openmrs_concept='215^JAUNDICE^99DCT'>false</jaundice> " +
+            "         <lymphadenopathy openmrs_concept='161^LYMPHADENOPATHY^99DCT'>false</lymphadenopathy>" +
+            "        </general_exam_findings>" +
+            "      </general_exam_construct>" +
+            "</form>"; 
 }

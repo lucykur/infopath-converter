@@ -1,53 +1,128 @@
 package org.openmrs.module.infopathconverter.rules.observation;
 
+import org.openmrs.module.infopathconverter.xmlutils.XPathUtils;
 import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.xml.xpath.XPathExpressionException;
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OpenMRSConceptFinder {
-    private Document xmlStream;
+    private Document document;
 
-    public OpenMRSConceptFinder(String templateXml) throws Exception {
-        xmlStream = XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(templateXml.getBytes()));
+    public OpenMRSConceptFinder(String template) throws Exception {
+        document = XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(template.getBytes()));
     }
 
     public OpenMRSConcept findConcept(Node node) throws Exception {
-        String bindingName = node.getAttributes().getNamedItem("xd:binding").getNodeValue();
-        String[] bindingNameSegments = bindingName.split("/");
-        return getOpenMRSConceptFromXML(bindingNameSegments);
+
+        return new BindingNode(node).
+               forEachSegment(
+                       new NodeAction()
+                       {
+                                OpenMRSConcept execute(String segment)
+                                {
+                                    try {
+                                        NodeList list = XPathUtils.matchNodes(document, String.format("//%s[@openmrs_concept and @openmrs_datatype != 'ZZ']",segment));
+                                        return new SegmentNode(list).toOpenMRSConcept();
+                                    } catch (XPathExpressionException e) {
+                                        return null;
+                                    }
+                                }
+                       });
+
+
     }
 
-    private OpenMRSConcept getOpenMRSConceptFromXML(String[] bindingNameSegments) throws Exception {
-        for (int i = 1; i < bindingNameSegments.length; i++) {
-            NodeList openmrsConceptMatchList = xmlStream.getElementsByTagName(bindingNameSegments[i]);
-            if (openmrsConceptMatchList.getLength() > 0) {
-                Node node = openmrsConceptMatchList.item(0);
-                if (node.getAttributes().getNamedItem("openmrs_concept") != null) {
-                    String datatype = node.getAttributes().getNamedItem("openmrs_datatype").getNodeValue();
-                    if (!"ZZ".equals(datatype)) {
-                        Node isMultipleNode = node.getAttributes().getNamedItem("multiple");
-                        String isMultiple = "0";
-                        if (isMultipleNode != null) {
-                            isMultiple = isMultipleNode.getNodeValue();
-                        }
-                        String openmrs_concept = node.getAttributes().getNamedItem("openmrs_concept").getNodeValue();
-                        return new OpenMRSConcept(isMultiple, getConceptId(openmrs_concept), datatype);
-                    }
-                }
+
+    private class BindingNode {
+        private String binding;
+
+        public BindingNode(Node node) {
+            binding = node.getAttributes().getNamedItem("xd:binding").getNodeValue();
+        }
+
+        public OpenMRSConcept forEachSegment(NodeAction action) {
+            String[] segments = binding.split("/");
+            OpenMRSConcept concept= null;
+            for (int i = 1; i < segments.length; i++) {
+                concept = action.execute(segments[i]);
+                if(concept!=null) break;
             }
+            return concept;
+        }
+    }
+
+    private abstract class NodeAction {
+        abstract OpenMRSConcept execute(String segment);
+    }
+
+    private class SegmentNode {
+        private Node node;
+
+        public SegmentNode(NodeList list) {
+            if (list.getLength() > 0) {
+                node = list.item(0);
+            }
+        }
+
+        public OpenMRSConcept toOpenMRSConcept() {
+            if (node == null) return null;
+            return new OpenMRSConcept(isMultiple(), getConceptId(), getDataType(), getAnswers());
 
         }
-        return null;
-    }
 
-    private String getConceptId(String openmrs_concept) {
-        int index = openmrs_concept.indexOf('^');
-        if (index != -1)
-            return openmrs_concept.substring(0, index);
-        return null;
-    }
+        private String isMultiple() {
+            String multiple = getAttribute("multiple");
+            return multiple == "" ? "0" : multiple;
+        }
 
+        private String getConcept() {
+            return getAttribute("openmrs_concept");
+        }
+
+        private String getDataType() {
+            return getAttribute("openmrs_datatype");
+        }
+
+        private String getAttribute(String attribute) {
+            String value = "";
+            try {
+                value = node.getAttributes().getNamedItem(attribute).getNodeValue();
+            } catch (Exception e) {
+            }
+            return value;
+        }
+
+        private List<String> getAnswers() {
+            NodeList childNodes = node.getChildNodes();
+            List<String> answers = new ArrayList<String>();
+            for (int i = 0; i < childNodes.getLength(); i++) {
+                Node node = childNodes.item(i);
+                if (node.getAttributes() != null) {
+                    Node openmrs_concept = node.getAttributes().getNamedItem("openmrs_concept");
+                    if (openmrs_concept != null)
+                        answers.add(getId(openmrs_concept.getNodeValue()));
+                }
+            }
+            return answers;
+        }
+
+        private String getConceptId() {
+            String concept = getConcept();
+            return getId(concept);
+        }
+
+        private String getId(String concept) {
+            int index = concept.indexOf('^');
+            if (index != -1)
+                return concept.substring(0, index);
+            return null;
+        }
+
+    }
 }

@@ -75,4 +75,16 @@ public class InfopathFormTest {
         assertXpathExists("//obs[@conceptId='1119']", transformedXSN);
 
     }
+
+    @Test
+    public void shouldEnsureThatIndividualTransformationsAreDoneWhenMultipleIsOne() throws Exception {
+        InfopathForm form = new InfopathForm("obs", SampleTestElements.OBSERVATION_CODED_MULTIPLE_XSL);
+        Document transformedXSN = form.toPage(SampleTestElements.OBSERVATION_CODED_MULTIPLE_XML);
+        assertXpathExists("//obs[@conceptId='1119'and @answerConceptId='460']", transformedXSN);
+        assertXpathExists("//obs[@conceptId='1119'and @answerConceptId='215']", transformedXSN);
+        assertXpathExists("//obs[@conceptId='1119'and @answerConceptId='161']", transformedXSN);
+
+    }
+
 }
+
