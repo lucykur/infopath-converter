@@ -1,95 +1,84 @@
 package org.openmrs.module.infopathconverter.rules.observation;
 
+import org.openmrs.module.infopathconverter.rules.NodeAction;
+import org.openmrs.module.infopathconverter.rules.Nodes;
 import org.openmrs.module.infopathconverter.rules.Rule;
-import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;
+import org.openmrs.module.infopathconverter.rules.XmlNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class ObservationRule implements Rule {
+public class ObservationRule extends Rule {
     private HashMap<String, Element> expressions;
-    private Document document;
     private TemplateXml templateXml;
 
 
-    public ObservationRule(TemplateXml templateXml) throws Exception {
-        document = XmlDocumentFactory.createEmptyXmlDocument();
-        this.expressions = new HashMap<String, Element>();
-        expressions.put("CWE", createObservationElement());
+    public ObservationRule(Document document, TemplateXml templateXml) throws Exception {
+        super(document);
+        addExpression("CWE", createObservationNode());
         this.templateXml = templateXml;
     }
 
-    private Element createObservationElement() {
-        Element codedObservation = document.createElement("obs");
-        codedObservation.setAttribute("conceptId", "");
-        codedObservation.setAttribute("answerConceptId", "");
-        return codedObservation;
+
+    private XmlNode createObservationNode() {
+        Element element = document.createElement("obs");
+        element.setAttribute("conceptId", "");
+        element.setAttribute("answerConceptId", "");
+        return new XmlNode(element);
     }
 
 
-    public void apply(Document page, NodeList nodes) throws Exception {
+    public void apply(Nodes nodes) throws Exception {
+        nodes.forEach(new NodeAction() {
+            public void execute(XmlNode node) throws Exception {
+                XmlNode concept = templateXml.findConcept(node);
+                XmlNode observation = getExpressionAsNode(concept.getDataType());
+                if (observation != null) {
+                    if (concept.hasMultiple()) {
+                        observation.setConceptId(concept.getConceptId());
+                        createTransformedNodes(node, concept, observation);
+                    }
+                } else
+                    node.remove();
 
-        for (int i = 0; i < nodes.getLength(); i++) {
-            Node node = nodes.item(i);
-            OpenMRSConcept concept = templateXml.findConcept(node);
-            Element observationNode = expressions.get(concept.datatype);
-            if (observationNode != null) {
-                if (concept.multiple != null) {
-                    Node importedObservationNode = page.importNode(observationNode, true);
-                    importedObservationNode.getAttributes().getNamedItem("conceptId").setNodeValue(concept.id);
-                    createTransformedNodes(node, concept, importedObservationNode);
-                }
-            } else
-                node.getParentNode().removeChild(node);
+            }
+        });
 
+    }
+
+    private void createTransformedNodes(XmlNode node, XmlNode concept, XmlNode importedObservationNode) {
+        ArrayList<XmlNode> answers = getNodesWithAnswerConcepts(node, importedObservationNode, concept);
+        for (XmlNode answer : answers) {
+            node.appendChild(answer);
         }
-
+        node.remove();
     }
 
-    private void createTransformedNodes(Node node, OpenMRSConcept concept, Node importedObservationNode) {
-        ArrayList<Node> nodesWithAnswerConcepts = getNodesWithAnswerConcepts(node, importedObservationNode, concept);
-        for (Node nodeWithAnswer : nodesWithAnswerConcepts) {
-            node.getParentNode().appendChild(nodeWithAnswer);
-        }
-        node.getParentNode().removeChild(node);
-    }
-
-    private ArrayList<Node> getNodesWithAnswerConcepts(Node node, Node importedObservationNode, OpenMRSConcept concept) {
-        ArrayList<Node> nodes = new ArrayList<Node>();
+    private ArrayList<XmlNode> getNodesWithAnswerConcepts(XmlNode node, XmlNode importedObservationNode, XmlNode concept) {
+        ArrayList<XmlNode> nodes = new ArrayList<XmlNode>();
         if (concept.isNotMultiple()) {
-            Node answerConcept = node.getAttributes().getNamedItem("xd:onValue");
-            String answerConceptId;
-            if (answerConcept != null) {
-                answerConceptId = getConceptId(answerConcept.getNodeValue());
-                importedObservationNode.getAttributes().getNamedItem("answerConceptId").setNodeValue(answerConceptId);
+            if (node.getOnValueConceptId() != null) {
+                importedObservationNode.setAnswerConceptId(node.getOnValueConceptId());
             } else {
-                importedObservationNode.getAttributes().removeNamedItem("answerConceptId");
+                importedObservationNode.removeAttribute("answerConceptId");
             }
             nodes.add(importedObservationNode);
             return nodes;
         } else {
-            if (concept.answers != null) {
-                for (String answer : concept.answers) {
-                    Node nodeWithAnswer = importedObservationNode.cloneNode(true);
-                    nodeWithAnswer.getAttributes().getNamedItem("answerConceptId").setNodeValue(answer);
+            List<String> answers = concept.getAnswers();
+            if (answers != null) {
+                for (String answer : answers) {
+                    XmlNode nodeWithAnswer = importedObservationNode.cloneNode();
+                    nodeWithAnswer.setAttribute("answerConceptId", answer);
                     nodes.add(nodeWithAnswer);
                 }
                 return nodes;
             }
 
         }
-        return null;
-    }
-
-
-    private String getConceptId(String openmrs_concept) {
-        int index = openmrs_concept.indexOf('^');
-        if (index != -1)
-            return openmrs_concept.substring(0, index);
         return null;
     }
 

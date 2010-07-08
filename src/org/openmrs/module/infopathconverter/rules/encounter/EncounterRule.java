@@ -1,44 +1,30 @@
 package org.openmrs.module.infopathconverter.rules.encounter;
 
+import org.openmrs.module.infopathconverter.rules.NodeAction;
+import org.openmrs.module.infopathconverter.rules.Nodes;
 import org.openmrs.module.infopathconverter.rules.Rule;
+import org.openmrs.module.infopathconverter.rules.XmlNode;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import java.util.HashMap;
-import java.util.Map;
+public class EncounterRule extends Rule {
 
-public class EncounterRule implements Rule {
-    private Map<String, String> encounterExpressionMap;
+    public EncounterRule(Document document) {
+        super(document);
+        addExpression("encounter/encounter.encounter_datetime", "encounterDate");
+        addExpression("encounter/encounter.provider_id", "encounterProvider");
 
-    public EncounterRule() {
-        this.encounterExpressionMap = new HashMap<String, String>();
-        encounterExpressionMap.put("encounter/encounter.encounter_datetime", "encounterDate");
-        encounterExpressionMap.put("encounter/encounter.provider_id", "encounterProvider");
     }
 
-    public void apply(Document document, NodeList nodes) {
-        for (int i = 0; i < nodes.getLength(); i++) {
-            Node node = nodes.item(i);
-            String elementName = transformAttribute(node);
-            if (elementName == null)
-                node.getParentNode().removeChild(node);
-            else {
-                Element encounterElement = document.createElement(elementName);
-                node.getParentNode().replaceChild(encounterElement, node);
+    public void apply(Nodes nodes) {
+        nodes.forEach(new NodeAction() {
+
+            public void execute(XmlNode node) throws Exception {
+
+                node.replace(document.createElement(searchExpression(node.getBinding())));
+
             }
-        }
+        });
     }
 
 
-    private String transformAttribute(Node lookupNode) {
-        String bindingName = lookupNode.getAttributes().getNamedItem("xd:binding").getNodeValue();
-        for (String encounterName : encounterExpressionMap.keySet()) {
-            if (bindingName.contains(encounterName)) {
-                return encounterExpressionMap.get(encounterName);
-            }
-        }
-        return null;
-    }
 }

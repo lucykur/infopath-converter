@@ -1,39 +1,48 @@
 package org.openmrs.module.infopathconverter.rules.encounter;
 
+import org.openmrs.module.infopathconverter.rules.NodeAction;
+import org.openmrs.module.infopathconverter.rules.Nodes;
 import org.openmrs.module.infopathconverter.rules.Rule;
+import org.openmrs.module.infopathconverter.rules.XmlNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EncounterLocationRule implements Rule {
-    public void apply(Document page, NodeList nodes) throws Exception {
-        EncounterNodes encounterNodes = new EncounterNodes(nodes);
-        Node parentNode = encounterNodes.getParentNode();
-        Element element = page.createElement("encounterLocation");
-        element.setAttribute("order", encounterNodes.getOrders());
-        parentNode.appendChild(element);
-        encounterNodes.detachFromParent();
+public class EncounterLocationRule extends Rule {
+    public EncounterLocationRule(Document document) {
+        super(document);
+    }
 
+
+    public void apply(Nodes nodes) throws Exception {
+        EncounterNodes encounterNodes = new EncounterNodes(nodes);
+        XmlNode parentNode = encounterNodes.getFirstNode();
+        Element element = document.createElement("encounterLocation");
+        element.setAttribute("order", encounterNodes.getOrders());
+        parentNode.appendChild(new XmlNode(element));
+        encounterNodes.detachFromParent();
     }
 
 
     private class EncounterNodes {
-        private NodeList nodes;
+        private Nodes nodes;
 
-        public EncounterNodes(NodeList nodes) {
+        public EncounterNodes(Nodes nodes) {
             this.nodes = nodes;
         }
 
         public String getOrders() {
-            List<String> orders = new ArrayList<String>();
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node location = nodes.item(i);
-                orders.add(location.getAttributes().getNamedItem("xd:onValue").getNodeValue());
-            }
+            final List<String> orders = new ArrayList<String>();
+
+            nodes.forEach(new NodeAction() {
+
+                public void execute(XmlNode node) throws Exception {
+                    orders.add(node.getOnValue());
+
+                }
+            });
             return join(orders, ",");
         }
 
@@ -47,15 +56,16 @@ public class EncounterLocationRule implements Rule {
             return sb.toString();
         }
 
-        public Node getParentNode() {
-            return nodes.item(0).getParentNode();
+        public XmlNode getFirstNode() {
+            return nodes.getNode(0);
         }
 
         public void detachFromParent() {
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node node = nodes.item(i);
-                node.getParentNode().removeChild(node);
-            }
+            nodes.forEach(new NodeAction() {
+                public void execute(XmlNode node) throws Exception {
+                    node.remove();
+                }
+            });
         }
     }
 }

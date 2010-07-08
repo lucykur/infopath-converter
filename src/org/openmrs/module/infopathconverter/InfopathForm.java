@@ -1,5 +1,6 @@
 package org.openmrs.module.infopathconverter;
 
+import org.openmrs.module.infopathconverter.rules.Nodes;
 import org.openmrs.module.infopathconverter.rules.encounter.EncounterLocationRule;
 import org.openmrs.module.infopathconverter.rules.encounter.EncounterRule;
 import org.openmrs.module.infopathconverter.rules.observation.ObservationRule;
@@ -53,14 +54,14 @@ public class InfopathForm {
 
 
     private void extractBindings(Document document, Document templateXml) throws Exception {
-        applyRules(document, "//*[starts-with(@xd:binding,'patient/')]", new PatientRule());
-        applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.encounter_datetime') or contains(@xd:binding,'encounter/encounter.provider_id')]", new EncounterRule());
-        applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.location_id')]", new EncounterLocationRule());
-        applyRules(document, "//*[starts-with(@xd:binding,'obs/')]", new ObservationRule(new TemplateXml(templateXml)));
+        applyRules(document, "//*[starts-with(@xd:binding,'patient/')]", new PatientRule(document));
+        applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.encounter_datetime') or contains(@xd:binding,'encounter/encounter.provider_id')]", new EncounterRule(document));
+        applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.location_id')]", new EncounterLocationRule(document));
+        applyRules(document, "//*[starts-with(@xd:binding,'obs/')]", new ObservationRule(document,new TemplateXml(templateXml)));
     }
 
     private void applyRules(Document document, String query, Rule rule) throws Exception {
         NodeList nodes = XPathUtils.matchNodes(document, query);
-        if(nodes !=null && nodes.getLength() > 0) rule.apply(document, nodes);
+        if(nodes !=null && nodes.getLength() > 0) rule.apply(new Nodes(nodes));
     }
 }
