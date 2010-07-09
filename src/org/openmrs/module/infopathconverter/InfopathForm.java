@@ -26,7 +26,7 @@ public class InfopathForm {
 
     }
 
-    public Document toPage(Document templateXml) throws Exception {
+    public Document toPage(TemplateXml templateXml) throws Exception {
         ByteArrayInputStream stream = new ByteArrayInputStream(content.getBytes());
         Document rawDocument = XmlDocumentFactory.createXmlDocumentFromStream(stream);
         Node node = extractPageBody(rawDocument);
@@ -51,11 +51,11 @@ public class InfopathForm {
     }
 
 
-    private void extractBindings(Document document, Document templateXml) throws Exception {
+    private void extractBindings(Document document, TemplateXml templateXml) throws Exception {
         applyRules(document, "//*[starts-with(@xd:binding,'patient/')]", new PatientRule(document));
         applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.encounter_datetime') or contains(@xd:binding,'encounter/encounter.provider_id')]", new EncounterRule(document));
         applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.location_id')]", new EncounterLocationRule(document));
-        applyRules(document, "//*[starts-with(@xd:binding,'obs/')]", new ObservationRule(document,new TemplateXml(templateXml)));
+        applyRules(document, "//*[starts-with(@xd:binding,'obs/')]", new ObservationRule(document,templateXml));
     }
 
     private void applyRules(Document document, String query, Rule rule) throws Exception {

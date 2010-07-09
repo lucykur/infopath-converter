@@ -116,9 +116,7 @@ public class XmlNode {
     }
 
     private void setAttribute(String key, String value) {
-
-        Node item = node.getAttributes().getNamedItem(key);
-            item.setNodeValue(value);
+        node.getAttributes().getNamedItem(key).setNodeValue(value);
     }
 
     public boolean isNotMultiple() {

@@ -1,6 +1,8 @@
 package org.openmrs.module.infopathconverter;
 
+import org.junit.Ignore;
 import org.junit.Test;
+import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
 import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -24,8 +26,8 @@ public class InfopathFormTest {
 
     }
 
-    private Document getTemplate(String xml) throws ParserConfigurationException, IOException, SAXException {
-        return XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(xml.getBytes()));
+    private TemplateXml getTemplate(String xml) throws Exception {
+        return new TemplateXml(XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(xml.getBytes())));
     }
 
     @Test
@@ -93,6 +95,15 @@ public class InfopathFormTest {
         assertXpathExists("//obs[@conceptId='1119'and @answerConceptId='460']", transformedXSN);
         assertXpathExists("//obs[@conceptId='1119'and @answerConceptId='215']", transformedXSN);
         assertXpathExists("//obs[@conceptId='1119'and @answerConceptId='161']", transformedXSN);
+
+    }
+
+    @Test
+    @Ignore("[Zabil/Lucy] - WIP")
+    public void shouldConvertRadioElementToCommaSeparatedAnswers() throws Exception {
+        InfopathForm form = new InfopathForm("obs", SampleTestElements.OBSERVATION_CODED_RADIO_XSL);
+        Document transformedXSN = form.toPage(getTemplate(SampleTestElements.OBSERVATION_CODED_RADIO_XML));
+        assertXpathExists("//obs[@conceptId='1119'and @answerConceptId='460,215,161']", transformedXSN);
 
     }
 

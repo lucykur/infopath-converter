@@ -1,15 +1,12 @@
 package org.openmrs.module.infopathconverter;
 
-import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;
-import org.w3c.dom.Document;
+import org.openmrs.module.infopathconverter.rules.Action;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class InfopathForms {
     private List<InfopathForm> forms;
-    private String template;
 
     public InfopathForms() {
         forms = new ArrayList<InfopathForm>();
@@ -19,20 +16,10 @@ public class InfopathForms {
         forms.add(infopathForm);
     }
 
-    public void setTemplateXml(String content) {
-        this.template = content;
-    }
 
-
-    public String toHTML() throws Exception {
-        HtmlForm htmlForm = new HtmlForm();
-        Document document = XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(template.getBytes()));
+    public void forEach(Action<InfopathForm> action) throws Exception {
         for (InfopathForm form : forms) {
-            htmlForm.addPage(form.toPage(document));
+            action.execute(form);
         }
-
-        return htmlForm.toString();
-
-
     }
 }

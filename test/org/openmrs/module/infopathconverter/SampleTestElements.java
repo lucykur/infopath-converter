@@ -111,7 +111,7 @@ public class SampleTestElements {
          "</history_of_present_illness>"+
          "   </form>";
 
-    public static final String OBSERVATION_CODED_NON_SPECIFIED_XSL = String.format("%s%s%s", HEADER,"<strong><input class='xdBehavior_Boolean' title='' type='radio' name='{generate-id(obs/history_of_present_illness/previous_echocardiogram_taken/value)}' tabIndex='0' xd:binding='obs/history_of_present_illness/previous_echocardiogram_taken/value' xd:xctname='OptionButton' xd:CtrlId='CTRL1314' xd:boundProp='xd:value' style='FONT-SIZE: 7pt; FONT-WEIGHT: normal'>" +
+    public static final String OBSERVATION_CODED_NON_SPECIFIED_XSL = String.format("%s%s%s", HEADER,"<strong><input class='xdBehavior_Boolean' title='' type='checkbox' name='{generate-id(obs/history_of_present_illness/previous_echocardiogram_taken/value)}' tabIndex='0' xd:binding='obs/history_of_present_illness/previous_echocardiogram_taken/value' xd:xctname='OptionButton' xd:CtrlId='CTRL1314' xd:boundProp='xd:value' style='FONT-SIZE: 7pt; FONT-WEIGHT: normal'>" +
             "<xsl:attribute name='xd:value'>" +
             "<xsl:value-of select='obs/history_of_present_illness/previous_echocardiogram_taken/value'/>" +
             "</xsl:attribute>" +
@@ -149,5 +149,73 @@ public class SampleTestElements {
             "         <lymphadenopathy openmrs_concept='161^LYMPHADENOPATHY^99DCT'>false</lymphadenopathy>" +
             "        </general_exam_findings>" +
             "      </general_exam_construct>" +
-            "</form>"; 
+            "</form>";
+    
+    
+    
+    public static final String OBSERVATION_CODED_RADIO_XSL = String.format("%s%s%s",HEADER,"<font face='Arial'>" +
+            "<div><input class='xdBehavior_Booleanehavior_Boolean' title='' type='radio' name='{generate-id(obs/history_of_present_illness/nyha_class/value)}' tabIndex='0' xd:binding='obs/history_of_present_illness/nyha_class/value' xd:xctname='OptionButton' xd:CtrlId='CTRL1136' xd:boundProp='xd:value' xd:onValue='3135^NYHA CLASS 1^99DCT'>" +
+            "<xsl:attribute name='xd:value'>" +
+            "<xsl:value-of select='obs/history_of_present_illness/nyha_class/value'/>" +
+            "</xsl:attribute>" +
+            "<xsl:if test='obs/history_of_present_illness/nyha_class/value=&quot;3135^NYHA CLASS 1^99DCT&quot;'>" +
+            "<xsl:attribute name='CHECKED'>CHECKED</xsl:attribute>" +
+            "</xsl:if>" +
+            "</input>" +
+            "<font face='Arial'>" +
+            "<font size='1'>NYHA classe I: (Asymptomatique) Pas de limitations d'activités/ <strong>" +
+            "<em>" +
+            "<font color='#808080'>(Asymptomatic) No limitations on activity </font>" +
+            "</em>" +
+            "</strong>" +
+            "</font>" +
+            "</font>" +
+            "</div>" +
+            "<div><input class='xdBehavior_Boolean' title='' type='radio' name='{generate-id(obs/history_of_present_illness/nyha_class/value)}' tabIndex='0' xd:binding='obs/history_of_present_illness/nyha_class/value' xd:xctname='OptionButton' xd:CtrlId='CTRL1457' xd:boundProp='xd:value' xd:onValue='3114^NYHA CLASS 1 AND 2^99DCT'>" +
+            "<xsl:attribute name='xd:value'>" +
+            "<xsl:value-of select='obs/history_of_present_illness/nyha_class/value'/>" +
+            "</xsl:attribute>" +
+            "<xsl:if test='obs/history_of_present_illness/nyha_class/value=&quot;3114^NYHA CLASS 1 AND 2^99DCT&quot;'>" +
+            "<xsl:attribute name='CHECKED'>CHECKED</xsl:attribute>" +
+            "</xsl:if>" +
+            "</input>" +
+            "<font face='Arial'>" +
+            "<font size='1'>NYHA classe I/II</font>" +
+            "</font>" +
+            "</div></font>",FOOTER);
+
+    public static final String OBSERVATION_CODED_RADIO_XML = "<history_of_present_illness><nyha_class openmrs_concept='3139^NYHA CLASS^99DCT' openmrs_datatype='CWE' multiple='0'>" +
+            "            <date xsi:nil='true'></date>" +
+            "            <time xsi:nil='true'></time>" +
+            "            <value xsi:nil='true'></value>" +
+            "      </nyha_class></history_of_present_illness>";
+
+
+    public static final String OBSERVATION_CODED_RADIO_XSD = "<xs:complexType name='nyha_class_type'>" +
+            "  <xs:sequence>" +
+            "    <xs:element name='date' type='xs:date' nillable='true' minOccurs='0' />" +
+            "    <xs:element name='time' type='xs:time' nillable='true' minOccurs='0' />" +
+            "    <xs:element name='value' minOccurs='0' maxOccurs='1' nillable='1'>" +
+            "      <xs:simpleType>" +
+            "        <xs:restriction base='xs:string'>" +
+            "          <xs:enumeration value='3138^NYHA CLASS 4^99DCT' /> <!-- NYHA CLASS 4 -->" +
+            "          <xs:enumeration value='3135^NYHA CLASS 1^99DCT' /> <!-- NYHA CLASS 1 -->" +
+            "          <xs:enumeration value='3136^NYHA CLASS 2^99DCT' /> <!-- NYHA CLASS 2 -->" +
+            "          <xs:enumeration value='6246^NYHA CLASS 3 AND 4^99DCT' /> <!-- NYHA CLASS 3 AND 4 -->" +
+            "          <xs:enumeration value='3137^NYHA CLASS 3^99DCT' /> <!-- NYHA CLASS 3 -->" +
+            "          <xs:enumeration value='3114^NYHA CLASS 1 AND 2^99DCT' /> <!-- NYHA CLASS 1 AND 2 -->" +
+            "          <xs:enumeration value='3999^NYHA CLASS 2 AND 3^99DCT' /> <!-- NYHA CLASS 2 AND 3 -->" +
+            "        </xs:restriction>" +
+            "      </xs:simpleType>" +
+            "    </xs:element>" +
+            "  </xs:sequence>" +
+            "  <xs:attribute name='openmrs_concept' type='xs:string' use='required' fixed='3139^NYHA CLASS^99DCT' />" +
+            "  <xs:attribute name='openmrs_datatype' type='xs:string' use='required' fixed='CWE' />" +
+            "  <xs:attribute name='multiple' type='xs:integer' use='required' fixed='0' />" +
+            "</xs:complexType>";
 }
+
+
+
+    
+
