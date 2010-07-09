@@ -1,28 +1,27 @@
 package org.openmrs.module.infopathconverter;
 
 import org.openmrs.module.infopathconverter.rules.Action;
+import org.openmrs.module.infopathconverter.rules.observation.InfopathXsd;
 import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
 import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class Infopath {
     private ZipInputStream stream;
     private TemplateXml template;
+    private InfopathXsd xsd;
 
     public Infopath(ZipInputStream stream) {
         this.stream = stream;
     }
 
 
-    private InfopathForms extractForms() throws Exception, SAXException, ParserConfigurationException {
+    private InfopathForms extractForms() throws Exception {
         final InfopathForms forms = new InfopathForms();
         ZipEntry entry;
         while ((entry = stream.getNextEntry()) != null) {
@@ -34,6 +33,12 @@ public class Infopath {
             if(name.equals("template.xml")){
                 template = new TemplateXml(XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(getContent().getBytes())));
             }
+
+            if(name.endsWith(".xsd")){
+                xsd = new InfopathXsd(XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(getContent().getBytes())));
+            }
+            
+
         }
 
         return forms;
@@ -54,7 +59,7 @@ public class Infopath {
         final HtmlForm htmlForm = new HtmlForm();
         extractForms().forEach(new Action<InfopathForm>(){
             public void execute(InfopathForm form) throws Exception {
-                  htmlForm.addPage(form.toPage(template));
+                  htmlForm.addPage(form.toPage(template, xsd));
             }
         });
         return htmlForm.toString();

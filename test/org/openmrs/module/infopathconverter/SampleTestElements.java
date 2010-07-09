@@ -163,7 +163,7 @@ public class SampleTestElements {
             "</xsl:if>" +
             "</input>" +
             "<font face='Arial'>" +
-            "<font size='1'>NYHA classe I: (Asymptomatique) Pas de limitations d'activités/ <strong>" +
+            "<font size='1'>NYHA classe I: (Asymptomatique) Pas de limitations d'activites/ <strong>" +
             "<em>" +
             "<font color='#808080'>(Asymptomatic) No limitations on activity </font>" +
             "</em>" +
@@ -184,14 +184,20 @@ public class SampleTestElements {
             "</font>" +
             "</div></font>",FOOTER);
 
-    public static final String OBSERVATION_CODED_RADIO_XML = "<history_of_present_illness><nyha_class openmrs_concept='3139^NYHA CLASS^99DCT' openmrs_datatype='CWE' multiple='0'>" +
+    public static final String OBSERVATION_CODED_RADIO_XML = "<form id='112' name='Cardiology consultation' version='1.6' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:openmrs='http://staging.pih-emr.org:8080/openmrs/moduleServlet/formentry/forms/schema/112-94' xmlns:xd='http://schemas.microsoft.com/office/infopath/2003'>" +
+            "<history_of_present_illness><nyha_class openmrs_concept='3139^NYHA CLASS^99DCT' openmrs_datatype='CWE' multiple='0'>" +
             "            <date xsi:nil='true'></date>" +
             "            <time xsi:nil='true'></time>" +
             "            <value xsi:nil='true'></value>" +
-            "      </nyha_class></history_of_present_illness>";
+            "      </nyha_class></history_of_present_illness>" +
+            "</form>";
 
 
-    public static final String OBSERVATION_CODED_RADIO_XSD = "<xs:complexType name='nyha_class_type'>" +
+    public static final String OBSERVATION_CODED_RADIO_XSD = "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"\n" +
+            "           xmlns:openmrs=\"http://staging.pih-emr.org:8080/openmrs/moduleServlet/formentry/forms/schema/112-94\"\n" +
+            "           elementFormDefault=\"qualified\"\n" +
+            "           attributeFormDefault=\"unqualified\">" +
+            "<xs:complexType name='nyha_class_type'>" +
             "  <xs:sequence>" +
             "    <xs:element name='date' type='xs:date' nillable='true' minOccurs='0' />" +
             "    <xs:element name='time' type='xs:time' nillable='true' minOccurs='0' />" +
@@ -212,7 +218,8 @@ public class SampleTestElements {
             "  <xs:attribute name='openmrs_concept' type='xs:string' use='required' fixed='3139^NYHA CLASS^99DCT' />" +
             "  <xs:attribute name='openmrs_datatype' type='xs:string' use='required' fixed='CWE' />" +
             "  <xs:attribute name='multiple' type='xs:integer' use='required' fixed='0' />" +
-            "</xs:complexType>";
+            "</xs:complexType>" +
+            "</xs:schema>";
 }
 
 

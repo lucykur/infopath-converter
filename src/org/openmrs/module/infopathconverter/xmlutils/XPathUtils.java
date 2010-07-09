@@ -10,12 +10,16 @@ import javax.xml.xpath.XPathFactory;
 
 
 public class XPathUtils {
-    public static Nodes matchNodes(Document document, String query) throws XPathExpressionException {
+    public static Nodes matchNodes(Document document, String query)  {
         XPathFactory factory = XPathFactory.newInstance();
         javax.xml.xpath.XPath xpath = factory.newXPath();
         xpath.setNamespaceContext(new XDNamespaceContext());
-        return new Nodes((NodeList) xpath.evaluate(query, document,
-                XPathConstants.NODESET));
+        try {
+            return new Nodes((NodeList) xpath.evaluate(query, document,
+                    XPathConstants.NODESET));
+        } catch (XPathExpressionException e) {
+            throw new RuntimeException(String.format("Could not find anyting matching for %s",query),e);
+        }
     }
 
 }

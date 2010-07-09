@@ -150,4 +150,17 @@ public class XmlNode {
     public boolean hasOnValueConceptId() {
         return !"".equals(getOnValueConceptId());
     }
+
+    public boolean isRadio() {
+        return "radio".equals(getAttribute("type"));
+    }
+
+    public String getBindingType() {
+        String[] bindings = getBinding().split("/");
+        return String.format("%s_type",bindings[bindings.length -2]);
+    }
+
+    public String getValueId() {
+        return getId(getAttribute("value"));
+    }
 }

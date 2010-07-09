@@ -1,8 +1,10 @@
 package org.openmrs.module.infopathconverter;
 
-import org.openmrs.module.infopathconverter.rules.*;
+import org.openmrs.module.infopathconverter.rules.PatientRule;
+import org.openmrs.module.infopathconverter.rules.Rule;
 import org.openmrs.module.infopathconverter.rules.encounter.EncounterLocationRule;
 import org.openmrs.module.infopathconverter.rules.encounter.EncounterRule;
+import org.openmrs.module.infopathconverter.rules.observation.InfopathXsd;
 import org.openmrs.module.infopathconverter.rules.observation.ObservationRule;
 import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
 import org.openmrs.module.infopathconverter.xmlutils.XPathUtils;
@@ -26,9 +28,8 @@ public class InfopathForm {
 
     }
 
-    public Document toPage(TemplateXml templateXml) throws Exception {
-        ByteArrayInputStream stream = new ByteArrayInputStream(content.getBytes());
-        Document rawDocument = XmlDocumentFactory.createXmlDocumentFromStream(stream);
+    public Document toPage(TemplateXml templateXml, InfopathXsd xsd) throws Exception {
+        Document rawDocument = XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(content.getBytes()));
         Node node = extractPageBody(rawDocument);
 
         Document page = XmlDocumentFactory.createEmptyXmlDocument();
@@ -37,7 +38,7 @@ public class InfopathForm {
         page.appendChild(pageElement);
         pageElement.appendChild(page.importNode(node, true));
 
-        extractBindings(page, templateXml);
+        extractBindings(page, templateXml, xsd);
         return page;
     }
 
@@ -51,11 +52,11 @@ public class InfopathForm {
     }
 
 
-    private void extractBindings(Document document, TemplateXml templateXml) throws Exception {
+    private void extractBindings(Document document, TemplateXml templateXml, InfopathXsd xsd) throws Exception {
         applyRules(document, "//*[starts-with(@xd:binding,'patient/')]", new PatientRule(document));
         applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.encounter_datetime') or contains(@xd:binding,'encounter/encounter.provider_id')]", new EncounterRule(document));
         applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.location_id')]", new EncounterLocationRule(document));
-        applyRules(document, "//*[starts-with(@xd:binding,'obs/')]", new ObservationRule(document,templateXml));
+        applyRules(document, "//*[starts-with(@xd:binding,'obs/')]", new ObservationRule(document, templateXml, xsd));
     }
 
     private void applyRules(Document document, String query, Rule rule) throws Exception {

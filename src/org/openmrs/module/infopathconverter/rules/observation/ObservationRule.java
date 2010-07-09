@@ -11,10 +11,12 @@ import java.util.ArrayList;
 
 public class ObservationRule extends Rule {
     private TemplateXml templateXml;
+    private InfopathXsd xsd;
 
 
-    public ObservationRule(Document document, TemplateXml templateXml) throws Exception {
+    public ObservationRule(Document document, TemplateXml templateXml, InfopathXsd xsd) throws Exception {
         super(document);
+        this.xsd = xsd;
         addExpression("CWE", createObservationNode());
         this.templateXml = templateXml;
     }
@@ -61,22 +63,30 @@ public class ObservationRule extends Rule {
 
     private ArrayList<XmlNode> getNodesWithAnswerConcepts(XmlNode node, XmlNode concept, final XmlNode observation) throws Exception {
         final ArrayList<XmlNode> nodes = new ArrayList<XmlNode>();
-        if (concept.isNotMultiple()) {
+        if (node.isRadio()) {
             XmlNode clone = observation.cloneNode();
-            if (node.hasOnValueConceptId()) {
-                clone.setAnswerConceptId(node.getOnValueConceptId());
-            } else {
-                clone.removeAttribute("answerConceptId");
-            }
+            String ids = xsd.getAnswerIds(node.getBindingType());
+            clone.setAnswerConceptId(ids);
             nodes.add(clone);
         } else {
-            concept.forEachAnswer(new Action<String>() {
-                public void execute(String answer) throws Exception {
-                    XmlNode nodeWithAnswer = observation.cloneNode();
-                    nodeWithAnswer.setAnswerConceptId(answer);
-                    nodes.add(nodeWithAnswer);
+            if (concept.isNotMultiple()) {
+                XmlNode clone = observation.cloneNode();
+                if (node.hasOnValueConceptId()) {
+                    clone.setAnswerConceptId(node.getOnValueConceptId());
+                } else {
+                    clone.removeAttribute("answerConceptId");
                 }
-            });
+                nodes.add(clone);
+            } else {
+                concept.forEachAnswer(new Action<String>() {
+                    public void execute(String answer) throws Exception {
+                        XmlNode nodeWithAnswer = observation.cloneNode();
+                        nodeWithAnswer.setAnswerConceptId(answer);
+                        nodes.add(nodeWithAnswer);
+                    }
+                });
+            }
+
         }
         return nodes;
     }

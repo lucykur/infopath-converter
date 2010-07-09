@@ -13,6 +13,8 @@ public class XDNamespaceContext implements NamespaceContext {
             return "http://www.w3.org/1999/XSL/Transform";
         } else if (prefix.equals("xsi")) {
             return "http://www.w3.org/2001/XMLSchema-instance";
+        }else if (prefix.equals("xs")) {
+            return "http://www.w3.org/2001/XMLSchema";
         }
         return null;
     }
