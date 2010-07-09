@@ -43,6 +43,7 @@ public class InfopathConverterModuleFormController {
         try {
             map.addAttribute("htmlform", infopath.toHTMLForm());
         } catch (Exception e) {
+            e.printStackTrace();
             session.setAttribute(WebConstants.OPENMRS_ERROR_ATTR, "infopathcoverter.parse.failure");
             session.setAttribute(WebConstants.OPENMRS_ERROR_ARGS, e.getMessage());
         }

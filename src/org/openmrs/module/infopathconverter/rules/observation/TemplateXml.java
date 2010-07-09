@@ -1,7 +1,8 @@
 package org.openmrs.module.infopathconverter.rules.observation;
 
-import org.openmrs.module.infopathconverter.rules.NodeAction;
+import org.openmrs.module.infopathconverter.rules.Action;
 import org.openmrs.module.infopathconverter.rules.XmlNode;
+import org.openmrs.module.infopathconverter.xmlutils.XPathUtils;
 import org.w3c.dom.Document;
 
 public class TemplateXml {
@@ -11,17 +12,19 @@ public class TemplateXml {
         this.document = document;
     }
 
-    public XmlNode findConcept(XmlNode node) throws Exception {
+    public void findConcept(XmlNode node, final Action<XmlNode> action) throws Exception {
 
-        final XmlNode[] concept = new XmlNode[1];
-        node.forEachBindingSegment(document, new NodeAction() {
-            @Override
-            public void execute(XmlNode node) throws Exception {
-                concept[0] = node;
+        node.forEachBindingSegment(new Action<String>() {
+            public void execute(String segment) throws Exception {
+                XPathUtils.matchNodes(document, String.format("//%s[@openmrs_concept and @openmrs_datatype != 'ZZ']", segment)).forEach(new Action<XmlNode>() {
+
+                    public void execute(XmlNode node) throws Exception {
+                        action.execute(node);
+                    }
+                });
+
             }
         });
-        return concept[0];
     }
-
 
 }

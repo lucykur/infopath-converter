@@ -1,6 +1,6 @@
 package org.openmrs.module.infopathconverter.rules.encounter;
 
-import org.openmrs.module.infopathconverter.rules.NodeAction;
+import org.openmrs.module.infopathconverter.rules.Action;
 import org.openmrs.module.infopathconverter.rules.Nodes;
 import org.openmrs.module.infopathconverter.rules.Rule;
 import org.openmrs.module.infopathconverter.rules.XmlNode;
@@ -15,8 +15,8 @@ public class EncounterRule extends Rule {
 
     }
 
-    public void apply(Nodes nodes) {
-        nodes.forEach(new NodeAction() {
+    public void apply(Nodes nodes) throws Exception {
+        nodes.forEach(new Action<XmlNode>() {
 
             public void execute(XmlNode node) throws Exception {
 

@@ -1,11 +1,9 @@
 package org.openmrs.module.infopathconverter;
 
-import org.openmrs.module.infopathconverter.rules.Nodes;
+import org.openmrs.module.infopathconverter.rules.*;
 import org.openmrs.module.infopathconverter.rules.encounter.EncounterLocationRule;
 import org.openmrs.module.infopathconverter.rules.encounter.EncounterRule;
 import org.openmrs.module.infopathconverter.rules.observation.ObservationRule;
-import org.openmrs.module.infopathconverter.rules.PatientRule;
-import org.openmrs.module.infopathconverter.rules.Rule;
 import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
 import org.openmrs.module.infopathconverter.xmlutils.XPathUtils;
 import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;
@@ -27,7 +25,7 @@ public class InfopathForm {
         this.content = content;
 
     }
-    
+
     public Document toPage(Document templateXml) throws Exception {
         ByteArrayInputStream stream = new ByteArrayInputStream(content.getBytes());
         Document rawDocument = XmlDocumentFactory.createXmlDocumentFromStream(stream);
@@ -44,7 +42,7 @@ public class InfopathForm {
     }
 
     public Node extractPageBody(Document document) throws XPathExpressionException {
-        NodeList matchNodes = XPathUtils.matchNodes(document, "//body");
+        NodeList matchNodes = XPathUtils.matchNodes(document, "//body").getNodes();
         if (matchNodes.getLength() > 0) {
             return matchNodes.item(0);
         } else {
@@ -61,7 +59,6 @@ public class InfopathForm {
     }
 
     private void applyRules(Document document, String query, Rule rule) throws Exception {
-        NodeList nodes = XPathUtils.matchNodes(document, query);
-        if(nodes !=null && nodes.getLength() > 0) rule.apply(new Nodes(nodes));
+        rule.apply(XPathUtils.matchNodes(document, query));
     }
 }

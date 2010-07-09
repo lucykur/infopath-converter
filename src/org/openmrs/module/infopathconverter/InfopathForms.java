@@ -23,19 +23,16 @@ public class InfopathForms {
         this.template = content;
     }
 
-    public String toString() {
+
+    public String toHTML() throws Exception {
         HtmlForm htmlForm = new HtmlForm();
-        try {
-            Document document = XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(template.getBytes()));
-            for (InfopathForm form : forms) {
-                htmlForm.addPage(form.toPage(document));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+        Document document = XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(template.getBytes()));
+        for (InfopathForm form : forms) {
+            htmlForm.addPage(form.toPage(document));
         }
 
         return htmlForm.toString();
+
 
     }
 }

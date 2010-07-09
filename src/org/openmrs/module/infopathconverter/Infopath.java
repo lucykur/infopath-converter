@@ -43,7 +43,7 @@ public class Infopath {
     }
 
     public String toHTMLForm() throws Exception {
-        return extractForms().toString();
+        return extractForms().toHTML();
     }
 
 

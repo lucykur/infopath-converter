@@ -15,8 +15,8 @@ public class PatientRule extends Rule {
     }
 
     public void apply(Nodes nodes
-    ) {
-        nodes.forEach(new NodeAction() {
+    ) throws Exception {
+        nodes.forEach(new Action<XmlNode>() {
 
             public void execute(XmlNode node) throws Exception {
                 Element element = document.createElement("lookup");

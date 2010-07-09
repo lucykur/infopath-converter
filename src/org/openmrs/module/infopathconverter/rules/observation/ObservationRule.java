@@ -1,6 +1,6 @@
 package org.openmrs.module.infopathconverter.rules.observation;
 
-import org.openmrs.module.infopathconverter.rules.NodeAction;
+import org.openmrs.module.infopathconverter.rules.Action;
 import org.openmrs.module.infopathconverter.rules.Nodes;
 import org.openmrs.module.infopathconverter.rules.Rule;
 import org.openmrs.module.infopathconverter.rules.XmlNode;
@@ -8,11 +8,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class ObservationRule extends Rule {
-    private HashMap<String, Element> expressions;
     private TemplateXml templateXml;
 
 
@@ -32,54 +29,56 @@ public class ObservationRule extends Rule {
 
 
     public void apply(Nodes nodes) throws Exception {
-        nodes.forEach(new NodeAction() {
-            public void execute(XmlNode node) throws Exception {
-                XmlNode concept = templateXml.findConcept(node);
-                XmlNode observation = getExpressionAsNode(concept.getDataType());
-                if (observation != null) {
-                    if (concept.hasMultiple()) {
-                        observation.setConceptId(concept.getConceptId());
-                        createTransformedNodes(node, concept, observation);
+        nodes.forEach(new Action<XmlNode>() {
+            public void execute(final XmlNode node) throws Exception {
+                templateXml.findConcept(node, new Action<XmlNode>() {
+                    public void execute(XmlNode concept) throws Exception {
+                        XmlNode observation = getExpressionAsNode(concept.getDataType());
+                        if (observation != null) {
+                            if (concept.hasMultiple()) {
+                                observation.setConceptId(concept.getConceptId());
+                                createTransformedNodes(node, concept, observation);
+                            } else {
+                                node.remove();
+                            }
+
+                        }
                     }
-                } else
-                    node.remove();
+                });
 
             }
         });
 
     }
 
-    private void createTransformedNodes(XmlNode node, XmlNode concept, XmlNode importedObservationNode) {
-        ArrayList<XmlNode> answers = getNodesWithAnswerConcepts(node, importedObservationNode, concept);
+    private void createTransformedNodes(XmlNode node, XmlNode concept, XmlNode observation) throws Exception {
+        ArrayList<XmlNode> answers = getNodesWithAnswerConcepts(node, concept, observation);
         for (XmlNode answer : answers) {
             node.appendChild(answer);
         }
         node.remove();
     }
 
-    private ArrayList<XmlNode> getNodesWithAnswerConcepts(XmlNode node, XmlNode importedObservationNode, XmlNode concept) {
-        ArrayList<XmlNode> nodes = new ArrayList<XmlNode>();
+    private ArrayList<XmlNode> getNodesWithAnswerConcepts(XmlNode node, XmlNode concept, final XmlNode observation) throws Exception {
+        final ArrayList<XmlNode> nodes = new ArrayList<XmlNode>();
         if (concept.isNotMultiple()) {
-            if (node.getOnValueConceptId() != null) {
-                importedObservationNode.setAnswerConceptId(node.getOnValueConceptId());
+            XmlNode clone = observation.cloneNode();
+            if (node.hasOnValueConceptId()) {
+                clone.setAnswerConceptId(node.getOnValueConceptId());
             } else {
-                importedObservationNode.removeAttribute("answerConceptId");
+                clone.removeAttribute("answerConceptId");
             }
-            nodes.add(importedObservationNode);
-            return nodes;
+            nodes.add(clone);
         } else {
-            List<String> answers = concept.getAnswers();
-            if (answers != null) {
-                for (String answer : answers) {
-                    XmlNode nodeWithAnswer = importedObservationNode.cloneNode();
-                    nodeWithAnswer.setAttribute("answerConceptId", answer);
+            concept.forEachAnswer(new Action<String>() {
+                public void execute(String answer) throws Exception {
+                    XmlNode nodeWithAnswer = observation.cloneNode();
+                    nodeWithAnswer.setAnswerConceptId(answer);
                     nodes.add(nodeWithAnswer);
                 }
-                return nodes;
-            }
-
+            });
         }
-        return null;
+        return nodes;
     }
 
 }

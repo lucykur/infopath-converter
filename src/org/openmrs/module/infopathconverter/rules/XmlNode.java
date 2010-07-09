@@ -1,12 +1,8 @@
 package org.openmrs.module.infopathconverter.rules;
 
-import org.openmrs.module.infopathconverter.xmlutils.XPathUtils;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import javax.xml.xpath.XPathExpressionException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +18,7 @@ public class XmlNode {
         try {
             value = node.getAttributes().getNamedItem(name).getNodeValue();
         } catch (Exception e) {
+
         }
         return value;
 
@@ -43,7 +40,7 @@ public class XmlNode {
         int index = concept.indexOf('^');
         if (index != -1)
             return concept.substring(0, index);
-        return null;
+        return "";
     }
 
     private String getMultiple() {
@@ -59,24 +56,18 @@ public class XmlNode {
         return getAttribute("xd:binding");
     }
 
-    public void forEachBindingSegment(Document document, final NodeAction action) throws XPathExpressionException {
+    public void forEachBindingSegment(final Action action) throws Exception {
         String[] segments = getBinding().split("/");
         for (int i = 1; i < segments.length; i++) {
-            NodeList list = XPathUtils.matchNodes(document, String.format("//%s[@openmrs_concept and @openmrs_datatype != 'ZZ']", segments[i]));
-            new Nodes(list).forEach(new NodeAction() {
-                @Override
-                public void execute(XmlNode node) throws Exception {
-                    action.execute(node);
-                }
-            });
+            action.execute(segments[i]);
         }
 
     }
 
-    public List<String> getAnswers() {
+    public List<String> getAnswers() throws Exception {
         final List<String> answers = new ArrayList<String>();
 
-        getChildNodes().forEach(new NodeAction() {
+        getChildNodes().forEach(new Action<XmlNode>() {
             public void execute(XmlNode node) {
                 if (node.getConcept() != null)
                     answers.add(node.getConceptId());
@@ -86,8 +77,10 @@ public class XmlNode {
         return answers;
     }
 
-    public void  appendChild (XmlNode node) {
-        this.node.getParentNode().appendChild(node.getNode());
+    public void appendChild(XmlNode child) {
+        Node parent = node.getParentNode();
+        if (parent != null)
+            parent.appendChild(child.getNode());
     }
 
     private Node getNode() {
@@ -95,7 +88,9 @@ public class XmlNode {
     }
 
     public void remove() {
-        node.getParentNode().removeChild(node);
+        Node parent = node.getParentNode();
+        if (parent != null)
+            parent.removeChild(node);
     }
 
     public String getOnValueConceptId() {
@@ -115,11 +110,15 @@ public class XmlNode {
     }
 
     public void replace(Element element) {
-        node.getParentNode().replaceChild(element, node);
+        Node parent = node.getParentNode();
+        if (parent != null)
+            parent.replaceChild(element, node);
     }
 
-    public void setAttribute(String key, String value) {
-        node.getAttributes().getNamedItem(key).setNodeValue(value);
+    private void setAttribute(String key, String value) {
+
+        Node item = node.getAttributes().getNamedItem(key);
+            item.setNodeValue(value);
     }
 
     public boolean isNotMultiple() {
@@ -135,14 +134,22 @@ public class XmlNode {
     }
 
     public void setAnswerConceptId(String conceptId) {
-        setAttribute("answerConceptId", conceptId);
-    }
-
-    public XmlNode getParentNode() {
-        return new XmlNode(node.getParentNode());
+        if (!"".equals(conceptId))
+            setAttribute("answerConceptId", conceptId);
     }
 
     public void setConceptId(String id) {
-        setAttribute("conceptId",id);
+        setAttribute("conceptId", id);
+    }
+
+    public void forEachAnswer(Action<String> action) throws Exception {
+        for (String answer : getAnswers()) {
+            action.execute(answer);
+        }
+
+    }
+
+    public boolean hasOnValueConceptId() {
+        return !"".equals(getOnValueConceptId());
     }
 }
