@@ -102,19 +102,44 @@ public class InfopathFormTest {
 
     }
 
-    private String documentAsString(Document xmlDocument) throws IOException {
-        OutputFormat format = new OutputFormat(xmlDocument);
-        StringWriter writer = new StringWriter();
-        XMLSerializer serializer = new XMLSerializer(writer, format);
-        serializer.serialize(xmlDocument);
-        return writer.toString();
-    }
-
     @Test
     public void shouldConvertRadioElementToCommaSeparatedAnswers() throws Exception {
         InfopathForm form = new InfopathForm("obs", SampleTestElements.OBSERVATION_CODED_RADIO_XSL);
         Document transformedXSN = form.toPage(getTemplate(SampleTestElements.OBSERVATION_CODED_RADIO_XML), getXsd(SampleTestElements.OBSERVATION_CODED_RADIO_XSD));
         assertXpathExists("//obs[@conceptId='3139'and @answerConceptId='3138,3135,3136,6246,3137,3114,3999']", transformedXSN);
+
+    }
+
+    @Test
+    public void shouldConvertCheckboxToBooleanCodedObservation() throws Exception {
+        InfopathForm form = new InfopathForm("obs", SampleTestElements.OBSERVATION_CODED_BIT_XSL);
+        Document transformedXSN = form.toPage(getTemplate(SampleTestElements.OBSERVATION_CODED_BIT_XML), getXsd(SampleTestElements.OBSERVATION_CODED_RADIO_XSD));
+        assertXpathExists("//obs[@conceptId='6208' and @style='checkbox']", transformedXSN);
+
+    }
+
+
+    @Test
+    public void shouldConvertTextBoxToTextObservation() throws Exception {
+        InfopathForm form = new InfopathForm("obs", SampleTestElements.OBSERVATION_CODED_TEXT_XSL);
+        Document transformedXSN = form.toPage(getTemplate(SampleTestElements.OBSERVATION_CODED_TEXT_XML), getXsd(SampleTestElements.OBSERVATION_CODED_RADIO_XSD));
+        assertXpathExists("//obs[@conceptId='3221' and @style='textarea']", transformedXSN);
+
+    }
+
+    @Test
+    public void shouldConvertTextBoxToNumericObservation() throws Exception {
+        InfopathForm form = new InfopathForm("obs", SampleTestElements.OBSERVATION_CODED_TEXT_XSL);
+        Document transformedXSN = form.toPage(getTemplate(SampleTestElements.OBSERVATION_CODED_NUMERIC_XML), getXsd(SampleTestElements.OBSERVATION_CODED_RADIO_XSD));
+        assertXpathExists("//obs[@conceptId='3221']", transformedXSN);
+
+    }
+
+    @Test
+    public void shouldConvertTextBoxToDateObservation() throws Exception {
+        InfopathForm form = new InfopathForm("obs", SampleTestElements.OBSERVATION_CODED_TEXT_XSL);
+        Document transformedXSN = form.toPage(getTemplate(SampleTestElements.OBSERVATION_CODED_DATE_XML), getXsd(SampleTestElements.OBSERVATION_CODED_RADIO_XSD));
+        assertXpathExists("//obs[@conceptId='3221']", transformedXSN);
 
     }
 

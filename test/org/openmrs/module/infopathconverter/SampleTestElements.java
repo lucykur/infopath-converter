@@ -220,6 +220,58 @@ public class SampleTestElements {
             "  <xs:attribute name='multiple' type='xs:integer' use='required' fixed='0' />" +
             "</xs:complexType>" +
             "</xs:schema>";
+    
+    public static final String OBSERVATION_CODED_BIT_XSL = String.format("%s%s%s",HEADER,"<input class='xdBehavior_Boolean' title='' type='checkbox' tabIndex='0' xd:binding='obs/history_of_present_illness/history_of_present_illness_duplicated_on_another_form/value' xd:xctname='CheckBox' xd:CtrlId='CTRL1358' xd:boundProp='xd:value' xd:offValue='false' xd:onValue='true'>" +
+            "<xsl:attribute name='xd:value'>" +
+            "<xsl:value-of select='obs/history_of_present_illness/history_of_present_illness_duplicated_on_another_form/value'/>" +
+            "</xsl:attribute>" +
+            "<xsl:if test='obs/history_of_present_illness/history_of_present_illness_duplicated_on_another_form/value=&quot;true&quot;'>" +
+            "<xsl:attribute name='CHECKED'>CHECKED</xsl:attribute>" +
+            "</xsl:if>" +
+            "</input>",FOOTER);
+
+    public static final String OBSERVATION_CODED_BIT_XML =  "<form id='112' name='Cardiology consultation' version='1.6' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:openmrs='http://staging.pih-emr.org:8080/openmrs/moduleServlet/formentry/forms/schema/112-94' xmlns:xd='http://schemas.microsoft.com/office/infopath/2003'>" +
+            "<history_of_present_illness>" +
+            "      <history_of_present_illness_duplicated_on_another_form openmrs_concept='6208^HISTORY OF PRESENT ILLNESS DUPLICATED ON ANOTHER FORM^99DCT' openmrs_datatype='BIT'>" +
+            "            <date xsi:nil='true'></date>" +
+            "            <time xsi:nil='true'></time>" +
+            "            <value infopath_boolean_hack='1' xsi:nil='true'></value>" +
+            "      </history_of_present_illness_duplicated_on_another_form></history_of_present_illness>" + "</form>";
+    
+    public static final String OBSERVATION_CODED_TEXT_XSL = String.format("%s%s%s",HEADER,"" +
+            "    <font color='#808080'><span hideFocus='1' class='xdTextBox' title='' tabIndex='0' xd:binding='obs/history_of_present_illness/relevant_interval_history/value' xd:xctname='PlainText' xd:CtrlId='CTRL1359' style='WIDTH: 100%; HEIGHT: 56px'>" +
+            "<xsl:value-of select='obs/history_of_present_illness/relevant_interval_history/value'/>" +
+            "</span>" +
+            "</font>",FOOTER);
+    
+    public static final String OBSERVATION_CODED_TEXT_XML ="<form id='112' name='Cardiology consultation' version='1.6' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:openmrs='http://staging.pih-emr.org:8080/openmrs/moduleServlet/formentry/forms/schema/112-94' xmlns:xd='http://schemas.microsoft.com/office/infopath/2003'>" +
+            "<history_of_present_illness>" +
+            " <relevant_interval_history openmrs_concept=\"3221^RELEVANT INTERVAL HISTORY^99DCT\" openmrs_datatype=\"ST\">\n" +
+            "            <date xsi:nil=\"true\"></date>\n" +
+            "            <time xsi:nil=\"true\"></time>\n" +
+            "            <value xsi:nil=\"true\"></value>\n" +
+            "      </relevant_interval_history>" +
+            "</history_of_present_illness>" +            
+            "</form>";
+    public static final String OBSERVATION_CODED_NUMERIC_XML = "<form id='112' name='Cardiology consultation' version='1.6' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:openmrs='http://staging.pih-emr.org:8080/openmrs/moduleServlet/formentry/forms/schema/112-94' xmlns:xd='http://schemas.microsoft.com/office/infopath/2003'>" +
+            "<history_of_present_illness>" +
+            " <relevant_interval_history openmrs_concept=\"3221^RELEVANT INTERVAL HISTORY^99DCT\" openmrs_datatype=\"NM\">\n" +
+            "            <date xsi:nil=\"true\"></date>\n" +
+            "            <time xsi:nil=\"true\"></time>\n" +
+            "            <value xsi:nil=\"true\"></value>\n" +
+            "      </relevant_interval_history>" +
+            "</history_of_present_illness>" +
+            "</form>";
+
+    public static final String OBSERVATION_CODED_DATE_XML = "<form id='112' name='Cardiology consultation' version='1.6' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:openmrs='http://staging.pih-emr.org:8080/openmrs/moduleServlet/formentry/forms/schema/112-94' xmlns:xd='http://schemas.microsoft.com/office/infopath/2003'>" +
+            "<history_of_present_illness>" +
+            " <relevant_interval_history openmrs_concept=\"3221^RELEVANT INTERVAL HISTORY^99DCT\" openmrs_datatype=\"DT\">\n" +
+            "            <date xsi:nil=\"true\"></date>\n" +
+            "            <time xsi:nil=\"true\"></time>\n" +
+            "            <value xsi:nil=\"true\"></value>\n" +
+            "      </relevant_interval_history>" +
+            "</history_of_present_illness>" +
+            "</form>";
 }
 
 

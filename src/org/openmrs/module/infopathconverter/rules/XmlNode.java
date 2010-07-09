@@ -44,8 +44,7 @@ public class XmlNode {
     }
 
     private String getMultiple() {
-        String multiple = getAttribute("multiple");
-        return multiple == "" ? "0" : multiple;
+        return  getAttribute("multiple");
     }
 
     public String getDataType() {
