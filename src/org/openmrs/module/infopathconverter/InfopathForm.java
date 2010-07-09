@@ -2,6 +2,7 @@ package org.openmrs.module.infopathconverter;
 
 import org.openmrs.module.infopathconverter.rules.PatientRule;
 import org.openmrs.module.infopathconverter.rules.Rule;
+import org.openmrs.module.infopathconverter.rules.SubmitButtonRule;
 import org.openmrs.module.infopathconverter.rules.encounter.EncounterLocationRule;
 import org.openmrs.module.infopathconverter.rules.encounter.EncounterRule;
 import org.openmrs.module.infopathconverter.rules.observation.InfopathXsd;
@@ -57,6 +58,7 @@ public class InfopathForm {
         applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.encounter_datetime') or contains(@xd:binding,'encounter/encounter.provider_id')]", new EncounterRule(document));
         applyRules(document, "//*[starts-with(@xd:binding,'encounter/encounter.location_id')]", new EncounterLocationRule(document));
         applyRules(document, "//*[starts-with(@xd:binding,'obs/')]", new ObservationRule(document, templateXml, xsd));
+        applyRules(document, "//input[@xd:CtrlId='SubmitButton']", new SubmitButtonRule(document));
     }
 
     private void applyRules(Document document, String query, Rule rule) throws Exception {

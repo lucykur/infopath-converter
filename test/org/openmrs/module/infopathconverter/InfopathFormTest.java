@@ -143,6 +143,13 @@ public class InfopathFormTest {
 
     }
 
+    @Test
+    public void shouldConvertSubmitButton() throws Exception {
+        InfopathForm form = new InfopathForm("obs", SampleTestElements.SUBMIT_XSL);
+        Document transformedXSN = form.toPage(getTemplate(SampleTestElements.OBSERVATION_CODED_DATE_XML), getXsd(SampleTestElements.OBSERVATION_CODED_RADIO_XSD));
+        assertXpathExists("//submit", transformedXSN);
+
+    }
 
     private InfopathXsd getXsd(String xsd) throws IOException, SAXException, ParserConfigurationException {
         return new InfopathXsd(XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(xsd.getBytes())));
