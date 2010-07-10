@@ -1,8 +1,5 @@
 package org.openmrs.module.infopathconverter;
 
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
-import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.module.infopathconverter.rules.observation.InfopathXsd;
 import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
@@ -13,7 +10,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathNotExists;

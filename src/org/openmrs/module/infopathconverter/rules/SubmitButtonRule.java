@@ -1,7 +1,6 @@
 package org.openmrs.module.infopathconverter.rules;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 public class SubmitButtonRule extends Rule {
     public SubmitButtonRule(Document document) {
