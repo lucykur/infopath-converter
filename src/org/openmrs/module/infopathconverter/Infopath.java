@@ -30,14 +30,14 @@ public class Infopath {
                 forms.add(new InfopathForm(name, getContent()));
             }
 
-            if(name.equals("template.xml")){
+            if (name.equals("template.xml")) {
                 template = new TemplateXml(XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(getContent().getBytes())));
             }
 
-            if(name.endsWith(".xsd")){
+            if (name.endsWith(".xsd")) {
                 xsd = new InfopathXsd(XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(getContent().getBytes())));
             }
-            
+
 
         }
 
@@ -57,9 +57,9 @@ public class Infopath {
 
     public String toHTMLForm() throws Exception {
         final HtmlForm htmlForm = new HtmlForm();
-        extractForms().forEach(new Action<InfopathForm>(){
+        extractForms().forEach(new Action<InfopathForm>() {
             public void execute(InfopathForm form) throws Exception {
-                  htmlForm.addPage(form.toPage(template, xsd));
+                htmlForm.addPage(form.toPage(template, xsd));
             }
         });
         return htmlForm.toString();

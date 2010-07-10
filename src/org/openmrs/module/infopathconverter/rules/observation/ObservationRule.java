@@ -10,11 +10,11 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 
 public class ObservationRule extends Rule {
-    private TemplateXml templateXml;
+    private TemplateXml xml;
     private InfopathXsd xsd;
 
 
-    public ObservationRule(Document document, TemplateXml templateXml, InfopathXsd xsd) throws Exception {
+    public ObservationRule(Document document, TemplateXml xml, InfopathXsd xsd) throws Exception {
         super(document);
         this.xsd = xsd;
         addExpression("CWE", createCWEObservationNode());
@@ -22,7 +22,7 @@ public class ObservationRule extends Rule {
         addExpression("ST", createSTObservationNode());
         addExpression("NM", createObservationNode());
         addExpression("DT", createObservationNode());
-        this.templateXml = templateXml;
+        this.xml = xml;
     }
 
 
@@ -57,7 +57,7 @@ public class ObservationRule extends Rule {
     public void apply(Nodes nodes) throws Exception {
         nodes.forEach(new Action<XmlNode>() {
             public void execute(final XmlNode node) throws Exception {
-                templateXml.findConcept(node, new Action<XmlNode>() {
+                xml.findConcept(node, new Action<XmlNode>() {
                     public void execute(XmlNode concept) throws Exception {
                         XmlNode observation = getExpressionAsNode(concept.getDataType());
                         if (observation != null) {
