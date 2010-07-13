@@ -5,7 +5,13 @@
 <h2><spring:message code="infopathconverter.link.name" /></h2>
 
 <br/>
-<form action="infopathconvertermoduleLink.form" method="POST" enctype ="multipart/form-data">
+
+<%
+    pageContext.setAttribute("htmlform", session.getAttribute("htmlform"));
+    session.removeAttribute("htmlform");
+%>
+
+<form method="POST" enctype ="multipart/form-data">
    <table>
        <tr>
            <td>

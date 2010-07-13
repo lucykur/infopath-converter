@@ -3,6 +3,7 @@ package org.openmrs.module.infopathconverter.web.controller;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockMultipartHttpServletRequest;
 import org.springframework.ui.ModelMap;
@@ -18,16 +19,16 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
 public class InfopathConverterModuleFormControllerTest {
     private final String infopathZip = "./test/org/openmrs/module/infopathconverter/include/infopath.zip";
 
-    private String convert(String path) throws IOException {
+    private String convert(String path) throws Exception {
         File input = new File(path);
         InputStream stream = new FileInputStream(input);
         MockMultipartHttpServletRequest multipartHttpServletRequest = new MockMultipartHttpServletRequest();
         multipartHttpServletRequest.addFile(new MockMultipartFile(input.getName(), stream));
         MultipartFile file = multipartHttpServletRequest.getFile(input.getName());
         InfopathConverterModuleFormController controller = new InfopathConverterModuleFormController();
-        ModelMap map = new ModelMap();
-        controller.convert(map, null, file);
-        return (String) map.get("htmlform");
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        controller.convert(request, null, file);
+        return (String) request.getAttribute("htmlform");
     }
 
     @Test

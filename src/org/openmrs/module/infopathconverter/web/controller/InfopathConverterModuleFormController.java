@@ -14,39 +14,50 @@
 package org.openmrs.module.infopathconverter.web.controller;
 
 import org.openmrs.module.infopathconverter.Infopath;
-import org.openmrs.web.WebConstants;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindException;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.SimpleFormController;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.zip.ZipInputStream;
 
-@Controller
-@RequestMapping("module/infopathconverter/infopathconvertermoduleLink.form")
-public class InfopathConverterModuleFormController {
+public class InfopathConverterModuleFormController extends SimpleFormController {
 
-    @RequestMapping(method = RequestMethod.GET)
-    public void showForm() {
 
+    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors) throws Exception {
+        ModelAndView view = new ModelAndView(new RedirectView(getSuccessView()));
+        if (request instanceof MultipartHttpServletRequest) {
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            MultipartFile xsnFile = multipartRequest.getFile("xsn");
+            if (xsnFile != null && !xsnFile.isEmpty()) {
+                convert(request, request.getSession(), xsnFile);
+                return view;
+            }
+        }
+
+        return view;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public void convert(ModelMap map, HttpSession session, @RequestParam(value = "xsn", required = true) MultipartFile file) throws IOException {
+    public void convert(HttpServletRequest map, HttpSession session, MultipartFile file) throws Exception {
 
         ZipInputStream inputStream = new ZipInputStream(file.getInputStream());
         Infopath infopath = new Infopath(inputStream);
-        try {
-            map.addAttribute("htmlform", infopath.toHTMLForm());
-        } catch (Exception e) {
-            e.printStackTrace();
-            session.setAttribute(WebConstants.OPENMRS_ERROR_ATTR, "infopathcoverter.parse.failure");
-            session.setAttribute(WebConstants.OPENMRS_ERROR_ARGS, e.getMessage());
-        }
+//        try {        
+        session.setAttribute("htmlform", infopath.toHTMLForm());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            session.setAttribute(WebConstants.OPENMRS_ERROR_ATTR, "infopathcoverter.parse.failure");
+//            session.setAttribute(WebConstants.OPENMRS_ERROR_ARGS, e.getMessage());
+//        }
     }
 
+
+    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+        return "";
+    }
 }
