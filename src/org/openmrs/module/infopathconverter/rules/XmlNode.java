@@ -44,7 +44,7 @@ public class XmlNode {
     }
 
     private String getMultiple() {
-        return  getAttribute("multiple");
+        return getAttribute("multiple");
     }
 
     public String getDataType() {
@@ -55,11 +55,10 @@ public class XmlNode {
         return getAttribute("xd:binding");
     }
 
-    public void forEachBindingSegment(final Action action) throws Exception {
+    public void forLastBindingSegment(final Action action) throws Exception {
         String[] segments = getBinding().split("/");
-        for (int i = 1; i < segments.length; i++) {
-            action.execute(segments[i]);
-        }
+        if (segments.length > 2)
+            action.execute(segments[segments.length - 2]);
 
     }
 
@@ -156,7 +155,7 @@ public class XmlNode {
 
     public String getBindingType() {
         String[] bindings = getBinding().split("/");
-        return String.format("%s_type",bindings[bindings.length -2]);
+        return String.format("%s_type", bindings[bindings.length - 2]);
     }
 
     public String getValueId() {

@@ -14,6 +14,7 @@
 package org.openmrs.module.infopathconverter.web.controller;
 
 import org.openmrs.module.infopathconverter.Infopath;
+import org.openmrs.web.WebConstants;
 import org.springframework.validation.BindException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -35,7 +36,7 @@ public class InfopathConverterModuleFormController extends SimpleFormController 
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
             MultipartFile xsnFile = multipartRequest.getFile("xsn");
             if (xsnFile != null && !xsnFile.isEmpty()) {
-                convert(request, request.getSession(), xsnFile);
+                convert(request.getSession(), xsnFile);
                 return view;
             }
         }
@@ -43,17 +44,17 @@ public class InfopathConverterModuleFormController extends SimpleFormController 
         return view;
     }
 
-    public void convert(HttpServletRequest map, HttpSession session, MultipartFile file) throws Exception {
+    public void convert(HttpSession session, MultipartFile file) throws Exception {
 
         ZipInputStream inputStream = new ZipInputStream(file.getInputStream());
         Infopath infopath = new Infopath(inputStream);
-//        try {        
+        try {
         session.setAttribute("htmlform", infopath.toHTMLForm());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            session.setAttribute(WebConstants.OPENMRS_ERROR_ATTR, "infopathcoverter.parse.failure");
-//            session.setAttribute(WebConstants.OPENMRS_ERROR_ARGS, e.getMessage());
-//        }
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute(WebConstants.OPENMRS_ERROR_ATTR, "infopathcoverter.parse.failure");
+            session.setAttribute(WebConstants.OPENMRS_ERROR_ARGS, e.getMessage());
+        }
     }
 
 

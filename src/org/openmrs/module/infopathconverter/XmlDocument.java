@@ -1,7 +1,8 @@
 package org.openmrs.module.infopathconverter;
 
+import org.openmrs.module.infopathconverter.rules.Nodes;
 import org.openmrs.module.infopathconverter.rules.Rule;
-import org.openmrs.module.infopathconverter.xmlutils.XPathUtils;
+import org.openmrs.module.infopathconverter.xmlutils.XPathUtil;
 import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -17,19 +18,22 @@ import java.util.HashMap;
 public class XmlDocument {
     private Document document;
     private HashMap<String, Rule> rules = new HashMap<String, Rule>();
+    private XPathUtil xpath;
 
     public XmlDocument(String content) throws IOException, SAXException, ParserConfigurationException {
         document = XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(content.getBytes()));
 
+        xpath = new XPathUtil(document);
     }
 
     public XmlDocument() throws ParserConfigurationException {
         document = XmlDocumentFactory.createEmptyXmlDocument();
 
+        xpath = new XPathUtil(document);
     }
 
     public Node getBody() {
-        NodeList matchNodes = XPathUtils.matchNodes(document, "//body").getNodes();
+        NodeList matchNodes = xpath.matchNodes("//body").getNodes();
         if (matchNodes.getLength() > 0) {
             return matchNodes.item(0);
         } else {
@@ -55,7 +59,11 @@ public class XmlDocument {
     public void applyRules() throws Exception {
         for (String binding : rules.keySet()) {
             Rule rule = rules.get(binding);
-            rule.apply(XPathUtils.matchNodes(document, binding));
+            rule.apply(xpath.matchNodes(binding));
         }
+    }
+
+    public Nodes match(String query) {
+        return xpath.matchNodes(query);
     }
 }

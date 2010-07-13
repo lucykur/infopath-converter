@@ -3,12 +3,10 @@ package org.openmrs.module.infopathconverter;
 import org.junit.Test;
 import org.openmrs.module.infopathconverter.rules.observation.InfopathXsd;
 import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
-import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
@@ -27,7 +25,7 @@ public class InfopathFormTest {
     }
 
     private TemplateXml getTemplate(String xml) throws Exception {
-        return new TemplateXml(XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(xml.getBytes())));
+        return new TemplateXml(new XmlDocument(xml));
     }
 
     @Test
@@ -148,7 +146,7 @@ public class InfopathFormTest {
     }
 
     private InfopathXsd getXsd(String xsd) throws IOException, SAXException, ParserConfigurationException {
-        return new InfopathXsd(XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(xsd.getBytes())));
+        return new InfopathXsd(new XmlDocument(xsd));
     }
 
 }

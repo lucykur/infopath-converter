@@ -4,14 +4,13 @@ import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockMultipartHttpServletRequest;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
@@ -27,8 +26,8 @@ public class InfopathConverterModuleFormControllerTest {
         MultipartFile file = multipartHttpServletRequest.getFile(input.getName());
         InfopathConverterModuleFormController controller = new InfopathConverterModuleFormController();
         MockHttpServletRequest request = new MockHttpServletRequest();
-        controller.convert(request, null, file);
-        return (String) request.getAttribute("htmlform");
+        controller.convert(request.getSession(), file);
+        return (String) request.getSession().getAttribute("htmlform");
     }
 
     @Test

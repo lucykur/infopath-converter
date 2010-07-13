@@ -3,9 +3,7 @@ package org.openmrs.module.infopathconverter;
 import org.openmrs.module.infopathconverter.rules.Action;
 import org.openmrs.module.infopathconverter.rules.observation.InfopathXsd;
 import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
-import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.zip.ZipEntry;
@@ -31,11 +29,11 @@ public class Infopath {
             }
 
             if (name.equals("template.xml")) {
-                template = new TemplateXml(XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(getContent().getBytes())));
+                template = new TemplateXml(new XmlDocument(getContent()));
             }
 
             if (name.endsWith(".xsd")) {
-                xsd = new InfopathXsd(XmlDocumentFactory.createXmlDocumentFromStream(new ByteArrayInputStream(getContent().getBytes())));
+                xsd = new InfopathXsd(new XmlDocument(getContent()));
             }
 
 
