@@ -15,11 +15,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathNotExists;
 
 public class InfopathConverterModuleFormControllerTest {
     private final String infopathZip = "./test/org/openmrs/module/infopathconverter/include/infopath.zip";
+    private static final String EMPTY_HTML_FORM = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+            "<htmlform xmlns:xd=\"http://schemas.microsoft.com/office/infopath/2003\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"/>";
 
     private String convert(String path) throws Exception {
         File input = new File(path);
@@ -31,7 +34,7 @@ public class InfopathConverterModuleFormControllerTest {
 
         LinkedMultiValueMap map = new LinkedMultiValueMap();
         map.add("xsn", file);
-        DefaultMultipartHttpServletRequest request = new DefaultMultipartHttpServletRequest(new MockHttpServletRequest(), map, null);
+        DefaultMultipartHttpServletRequest request = new DefaultMultipartHttpServletRequest(multipartHttpServletRequest, map, null);
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         controller.onSubmit(request, response, null, null);
@@ -70,9 +73,10 @@ public class InfopathConverterModuleFormControllerTest {
     }
 
     @Test
-    @Ignore
-    public void shouldDisplayErrorMessageForInvalidFiles() throws Exception {
-        convert("./test/org/openmrs/module/infopathconverter/include/invalidInfopath.txt");
+    public void shouldReturnEmptyHtmlFormForInvalidFiles() throws Exception {
+        String transformedXSN = convert("./test/org/openmrs/module/infopathconverter/include/invalidInfopath.txt");
+        String expectedEmptyForm = EMPTY_HTML_FORM;
+        assertXMLEqual(transformedXSN,expectedEmptyForm);
     }
 
     @Test
@@ -81,12 +85,10 @@ public class InfopathConverterModuleFormControllerTest {
 
     }
 
-
     @Test
     public void shouldTransferEncounterLocation() throws Exception {
         assertXpathExists("//encounterLocation[@order='30,27,28,25,37,38,26,29,1']", convert(infopathZip));
     }
-
 
     @Test
     public void shouldTransferEncounterProvider() throws Exception {
@@ -107,7 +109,6 @@ public class InfopathConverterModuleFormControllerTest {
         String transformedXSN = convert(infopathZip);
         assertXpathNotExists("//obs[@answerConceptId='']", transformedXSN);
     }
-
 
     @Test
     public void shouldEnsureThatOpenMRSConceptOfDatatypeZZAreNotPickedUp() throws Exception {
