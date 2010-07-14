@@ -68,7 +68,10 @@ public class InfopathConverterModuleFormController extends SimpleFormController 
     /**
 	 * Method that does the transformation when the OnSubmit is invoked on POST
 	 *
-	 * @should perform all the transformations from the XSN to the HTML form
+	 * @param session
+     * @param file - The multipart file that needs the transformation
+     * @should perform all the transformations from the XSN to the HTML form
+     * @throws Exception
 	 */
     private void convert(HttpSession session, MultipartFile file) throws Exception {
 

@@ -21,10 +21,6 @@ public class Nodes {
 
     }
 
-    public XmlNode getNode(int i) {
-        return new XmlNode(nodes.item(i));
-    }
-
     public NodeList getNodes() {
         return nodes;
     }

@@ -17,7 +17,7 @@ public class XmlNode {
         String value = "";
         try {
             value = node.getAttributes().getNamedItem(name).getNodeValue();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         return value;
@@ -57,8 +57,9 @@ public class XmlNode {
 
     public void forLastBindingSegment(final Action action) throws Exception {
         String[] segments = getBinding().split("/");
-        if (segments.length > 2)
+        if (segments.length > 2) {
             action.execute(segments[segments.length - 2]);
+        }
 
     }
 
