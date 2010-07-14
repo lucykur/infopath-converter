@@ -1,7 +1,5 @@
 package org.openmrs.module.infopathconverter;
 
-import org.openmrs.module.infopathconverter.rules.Action;
-
 import java.util.ArrayList;
 import java.util.List;
 

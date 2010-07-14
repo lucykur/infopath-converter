@@ -1,9 +1,9 @@
 package org.openmrs.module.infopathconverter.rules.observation;
 
-import org.openmrs.module.infopathconverter.rules.Action;
-import org.openmrs.module.infopathconverter.rules.Nodes;
+import org.openmrs.module.infopathconverter.Action;
+import org.openmrs.module.infopathconverter.XmlNode;
+import org.openmrs.module.infopathconverter.Nodes;
 import org.openmrs.module.infopathconverter.rules.Rule;
-import org.openmrs.module.infopathconverter.rules.XmlNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

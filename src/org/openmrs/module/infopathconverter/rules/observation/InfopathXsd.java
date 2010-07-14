@@ -1,8 +1,8 @@
 package org.openmrs.module.infopathconverter.rules.observation;
 
 import org.openmrs.module.infopathconverter.XmlDocument;
-import org.openmrs.module.infopathconverter.rules.ReturnAction;
-import org.openmrs.module.infopathconverter.rules.XmlNode;
+import org.openmrs.module.infopathconverter.ReturnAction;
+import org.openmrs.module.infopathconverter.XmlNode;
 
 import java.util.HashMap;
 

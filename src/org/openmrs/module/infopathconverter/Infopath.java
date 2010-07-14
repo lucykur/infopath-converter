@@ -1,6 +1,5 @@
 package org.openmrs.module.infopathconverter;
 
-import org.openmrs.module.infopathconverter.rules.Action;
 import org.openmrs.module.infopathconverter.rules.observation.InfopathXsd;
 import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
 

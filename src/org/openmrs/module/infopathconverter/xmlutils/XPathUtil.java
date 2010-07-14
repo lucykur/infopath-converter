@@ -1,6 +1,6 @@
 package org.openmrs.module.infopathconverter.xmlutils;
 
-import org.openmrs.module.infopathconverter.rules.Nodes;
+import org.openmrs.module.infopathconverter.Nodes;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 

@@ -1,5 +1,7 @@
 package org.openmrs.module.infopathconverter.rules;
 
+import org.openmrs.module.infopathconverter.Nodes;
+import org.openmrs.module.infopathconverter.XmlNode;
 import org.w3c.dom.Document;
 
 import java.util.HashMap;

@@ -1,6 +1,5 @@
 package org.openmrs.module.infopathconverter;
 
-import org.openmrs.module.infopathconverter.rules.Nodes;
 import org.openmrs.module.infopathconverter.rules.Rule;
 import org.openmrs.module.infopathconverter.xmlutils.XPathUtil;
 import org.openmrs.module.infopathconverter.xmlutils.XmlDocumentFactory;

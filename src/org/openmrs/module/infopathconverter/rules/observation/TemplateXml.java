@@ -1,8 +1,8 @@
 package org.openmrs.module.infopathconverter.rules.observation;
 
+import org.openmrs.module.infopathconverter.Action;
 import org.openmrs.module.infopathconverter.XmlDocument;
-import org.openmrs.module.infopathconverter.rules.Action;
-import org.openmrs.module.infopathconverter.rules.XmlNode;
+import org.openmrs.module.infopathconverter.XmlNode;
 
 public class TemplateXml {
     private XmlDocument document;
