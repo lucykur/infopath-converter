@@ -104,7 +104,7 @@ public class XmlNode {
     }
 
     public boolean hasMultiple() {
-        return (getMultiple() != null && !"".equals(getMultiple()));
+        return (getMultiple() != null && !isEmpty(getMultiple()));
     }
 
     public void replace(Element element) {
@@ -130,7 +130,7 @@ public class XmlNode {
     }
 
     public void setAnswerConceptId(String conceptId) {
-        if (!"".equals(conceptId))
+        if (!isEmpty(conceptId))
             setAttribute("answerConceptId", conceptId);
     }
 
@@ -140,13 +140,18 @@ public class XmlNode {
 
     public void forEachAnswer(Action<String> action) throws Exception {
         for (String answer : getAnswers()) {
+            if(!isEmpty(answer))
             action.execute(answer);
         }
 
     }
 
+    private boolean isEmpty(String answer) {
+        return "".equals(answer);
+    }
+
     public boolean hasOnValueConceptId() {
-        return !"".equals(getOnValueConceptId());
+        return !isEmpty(getOnValue());
     }
 
     public boolean isRadio() {
@@ -160,5 +165,14 @@ public class XmlNode {
 
     public String getValueId() {
         return getId(getAttribute("value"));
+    }
+
+    public String getAnswerConcept() {
+        String id = getOnValueConceptId();
+        if(isEmpty(id))
+            return getOnValue();
+        else
+            return id;
+
     }
 }

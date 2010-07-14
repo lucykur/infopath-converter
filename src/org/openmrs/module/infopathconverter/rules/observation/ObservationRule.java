@@ -1,8 +1,8 @@
 package org.openmrs.module.infopathconverter.rules.observation;
 
 import org.openmrs.module.infopathconverter.Action;
-import org.openmrs.module.infopathconverter.XmlNode;
 import org.openmrs.module.infopathconverter.Nodes;
+import org.openmrs.module.infopathconverter.XmlNode;
 import org.openmrs.module.infopathconverter.rules.Rule;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -65,8 +65,8 @@ public class ObservationRule extends Rule {
                             if (concept.hasMultiple()) {
                                 createTransformedNodes(node, concept, observation);
                             } else {
-                              node.appendChild(observation.cloneNode());
-                              node.remove();
+                                node.appendChild(observation.cloneNode());
+                                node.remove();
                             }
 
                         }
@@ -97,7 +97,7 @@ public class ObservationRule extends Rule {
             if (concept.isNotMultiple()) {
                 XmlNode clone = observation.cloneNode();
                 if (node.hasOnValueConceptId()) {
-                    clone.setAnswerConceptId(node.getOnValueConceptId());
+                    clone.setAnswerConceptId(node.getAnswerConcept());
                 } else {
                     clone.removeAttribute("answerConceptId");
                 }
