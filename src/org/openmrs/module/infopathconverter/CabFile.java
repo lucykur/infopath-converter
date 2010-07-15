@@ -1,6 +1,6 @@
 package org.openmrs.module.infopathconverter;
 
-import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
+import org.apache.commons.io.IOUtils;
 import org.openmrs.util.OpenmrsConstants;
 
 import java.io.*;
@@ -8,8 +8,8 @@ import java.io.*;
 public class CabFile {
     private File location;
 
-    public CabFile(String path) throws IOException {
-        location = expandXsn(new File(path).getAbsolutePath());
+    public CabFile(FileInputStream stream) throws IOException {
+        location = expandXsnContents(IOUtils.toByteArray(stream));
     }
 
     public void forEachEntry(Action<CabEntry> action) throws Exception {
@@ -18,6 +18,33 @@ public class CabFile {
         }
     }
 
+
+    private File expandXsnContents(byte[] xsnFileContents)
+            throws IOException {
+        // copy the xsn contents to a temporary directory
+        File tempXsnFromDatabaseDir = createTempDirectory("XSN-db-file");
+        if (tempXsnFromDatabaseDir == null)
+            throw new IOException(
+                    "Failed to create temporary content directory");
+
+        // copy the xsn contents to a new file
+        File tmpXsnFromDatabaseFile = new File(tempXsnFromDatabaseDir,
+                "tempContent.xsn");
+        OutputStream out = new FileOutputStream(tmpXsnFromDatabaseFile);
+        out.write(xsnFileContents);
+        out.flush();
+        out.close();
+
+        String xsnFilePath = tmpXsnFromDatabaseFile.getAbsolutePath();
+
+        File expandedContentsDir = null;
+        try {
+            expandedContentsDir = expandXsn(xsnFilePath);
+        } finally {
+        }
+
+        return expandedContentsDir;
+    }
 
     private File expandXsn(String xsnFilePath) throws IOException {
         File xsnFile = new File(xsnFilePath);

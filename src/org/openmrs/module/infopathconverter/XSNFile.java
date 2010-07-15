@@ -3,13 +3,14 @@ package org.openmrs.module.infopathconverter;
 import org.openmrs.module.infopathconverter.rules.observation.InfopathXsd;
 import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 public class XSNFile {
     private CabFile file;
 
-    public XSNFile(String path) throws IOException {
-        file = new CabFile(path);
+    public XSNFile(FileInputStream stream) throws IOException {
+        file = new CabFile(stream);
     }
 
 

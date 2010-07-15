@@ -1,9 +1,11 @@
 package org.openmrs.module.infopathconverter;
 
+import com.sun.java.util.jar.pack.*;
 import org.openmrs.module.infopathconverter.rules.observation.InfopathXsd;
 import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -52,7 +54,7 @@ public class Infopath {
         return writer.toString();
     }
 
-    public String toHTMLForm() throws Exception {
+    public String toHTMLForm() throws Exception {        
         final HtmlForm htmlForm = new HtmlForm();
         extractForms().forEach(new Action<InfopathForm>() {
             public void execute(InfopathForm form) throws Exception {
