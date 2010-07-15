@@ -16,4 +16,10 @@ public class XSNFileTest {
         XSNFile file = new XSNFile("./test/org/openmrs/module/infopathconverter/include/infopath.xsn");
         Assert.assertNotNull(file.getTemplateXml());    
     }
+
+    @Test
+    public void shouldReturnTheXsd() throws Exception {
+        XSNFile file = new XSNFile("./test/org/openmrs/module/infopathconverter/include/infopath.xsn");
+        Assert.assertNotNull(file.getInfopathXsd());          
+    }
 }

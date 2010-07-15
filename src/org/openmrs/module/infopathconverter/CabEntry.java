@@ -9,7 +9,6 @@ public class CabEntry {
     private File file;
 
     public CabEntry(File file) {
-        //To change body of created methods use File | Settings | File Templates.
         this.file = file;
     }
 
@@ -35,5 +34,9 @@ public class CabEntry {
 
     public boolean isTemplateXml() {
         return getName().equals("template.xml");
+    }
+
+    public boolean isXsd() {
+        return getName().endsWith(".xsd");
     }
 }

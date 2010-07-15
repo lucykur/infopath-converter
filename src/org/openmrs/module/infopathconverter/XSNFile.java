@@ -1,5 +1,6 @@
 package org.openmrs.module.infopathconverter;
 
+import org.openmrs.module.infopathconverter.rules.observation.InfopathXsd;
 import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
 
 import java.io.IOException;
@@ -39,4 +40,15 @@ public class XSNFile {
     }
 
 
+    public InfopathXsd getInfopathXsd() throws Exception {
+        final InfopathXsd[] xsd = {null};
+        file.forEachEntry(new Action<CabEntry>(){
+            public void execute(CabEntry entry) throws Exception {
+                if(entry.isXsd()){
+                    xsd[0] = new InfopathXsd(new XmlDocument(entry.getContents()));
+                }
+            }
+        });
+        return xsd[0];
+    }
 }
