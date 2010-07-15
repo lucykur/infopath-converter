@@ -7,7 +7,8 @@ public class XSNFileTest {
     @Test
     public void shouldReturnAListOfXSLFiles() throws Exception {
         XSNFile file = new XSNFile("./test/org/openmrs/module/infopathconverter/include/infopath.xsn");
-        Assert.assertEquals(1, file.getForms().length());
+        InfopathForms forms = file.getForms();
+        Assert.assertEquals(1, forms.length());
     }
 
     @Test

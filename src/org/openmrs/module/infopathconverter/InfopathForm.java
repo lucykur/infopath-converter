@@ -8,21 +8,24 @@ import org.openmrs.module.infopathconverter.rules.observation.InfopathXsd;
 import org.openmrs.module.infopathconverter.rules.observation.ObservationRule;
 import org.openmrs.module.infopathconverter.rules.observation.TemplateXml;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 
 
 public class InfopathForm {
     private String formName;
-    private String content;
+    private XmlDocument form;
 
-    public InfopathForm(String formName, String content) {
+    public InfopathForm(String formName, String content) throws Exception {
         this.formName = formName;
-        this.content = content;
-
+        form = new XmlDocument(content);
     }
 
     public Document toPage(TemplateXml templateXml, InfopathXsd xsd) throws Exception {
         XmlDocument page = new XmlDocument();
-        page.createPage(formName, new XmlDocument(content).getBody());
+        page.createPage(formName, form.getBody());
 
         page.addRule("//*[starts-with(@xd:binding,'patient/')]", new PatientRule(page.getDocument()));
         page.addRule("//*[starts-with(@xd:binding,'encounter/encounter.encounter_datetime') or contains(@xd:binding,'encounter/encounter.provider_id')]", new EncounterRule(page.getDocument()));
