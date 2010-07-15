@@ -20,4 +20,8 @@ public class InfopathForms {
             action.execute(form);
         }
     }
+
+    public int length() {
+       return forms.size();
+    }
 }
