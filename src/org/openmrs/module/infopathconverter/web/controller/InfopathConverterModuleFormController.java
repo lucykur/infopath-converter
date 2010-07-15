@@ -74,7 +74,6 @@ public class InfopathConverterModuleFormController extends SimpleFormController 
      * @throws Exception
 	 */
     private void convert(HttpSession session, MultipartFile file) throws Exception {
-
         ZipInputStream inputStream = new ZipInputStream(file.getInputStream());
         Infopath infopath = new Infopath(inputStream);
         try {

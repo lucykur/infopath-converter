@@ -8,7 +8,7 @@ import java.io.*;
 public class CabFile {
     private File location;
 
-    public CabFile(FileInputStream stream) throws IOException {
+    public CabFile(InputStream stream) throws IOException {
         location = expandXsnContents(IOUtils.toByteArray(stream));
     }
 
