@@ -19,7 +19,7 @@ import java.io.InputStream;
 import static org.custommonkey.xmlunit.XMLAssert.*;
 
 public class InfopathConverterModuleFormControllerTest {
-    private static final String infopathZip = "./test/org/openmrs/module/infopathconverter/include/infopath.zip";
+    private static final String infopathZip = "./test/org/openmrs/module/infopathconverter/include/infopath.xsn";
     private static final String EMPTY_HTML_FORM = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<htmlform xmlns:xd=\"http://schemas.microsoft.com/office/infopath/2003\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"/>";
     private static String transformedXSN;
